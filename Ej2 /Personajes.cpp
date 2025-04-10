@@ -1,5 +1,5 @@
 #include "Personajes.hpp"
-#include "Items.hpp"
+#include "ItemsMagicos.hpp"
 
 using namespace std;
 

@@ -1,6 +1,6 @@
 #pragma once
-#include "Items.hpp"
-
+#include "ItemsMagicos.hpp"
+#include "ItemsCombate.hpp"
 /*Al mismo tiempo, se desea implementar dos grupos de personajes 
 i. Magos: hechicero, conjurador, brujo y nigromante. 
 ii. Guerreros: bárbaro, paladín, caballero, mercenario y gladiador. 

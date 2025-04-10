@@ -1,111 +1,163 @@
-#include "Items.hpp"
+#include "ItemsMagicos.hpp"
+#include "ItemsCombate.hpp"
 #include "Personajes.hpp"
 
-using namespace std;
+enum NombreCreador {
+    RAGNAR_LOTHBROK, //mistico
+    GANDALF, 
+    PEDRO, // mistico
+    DR_STRANGE 
+};
 
-Arma::Arma(std::string nombre, int damage, int nivel, 
-           int critico, bool ataqueLetal) : 
-    nombre(nombre), damage(damage), critico(critico), ataqueLetal(ataqueLetal) {}
-
-Arma::~Arma() {}
-int Arma::getCritico() const {
-    return critico;
+string asignarNombreCreador(ItemMagico& item) {
+    // Asigno creador al azar
+    srand(time(0)); // Inicializar la semilla del generador de números aleatorios
+    int random = rand() % 4;  
+    string nombreCreador;
+    switch (random) {
+        case 0:
+            nombreCreador = "Ragnar Lothbrok";
+            item.setMistico(true);
+            break;
+        case 1:
+            nombreCreador = "Gandalf";
+            break;
+        case 2:
+            nombreCreador = "Pedro";
+            item.setMistico(true);
+            break;
+        case 3:
+            nombreCreador = "Dr. Strange";
+            break;
+    }
+    return nombreCreador;
 }
-int Arma::getDamage() const {
+
+bool asignarMaldecido(ItemMagico& item) {
+    // Asigno maldición al azar
+    srand(time(0)); // Inicializar la semilla del generador de números aleatorios
+    int random = rand() % 5;  
+    if (random == 0) {
+        item.maldicir();
+        return true;
+    }
+    return false; 
+}  
+
+ItemMagico::~ItemMagico() = default;
+
+ItemMagico::ItemMagico(int damage, int critico, int poderMagico,
+    bool consumible, string nombreCreador)
+    : damage(damage), critico(critico), poderMagico(poderMagico),
+    consumible(consumible), mistico(false), maldecido(asignarMaldecido(*this)),
+    nombreCreador(asignarNombreCreador(*this)) {}
+
+
+int ItemMagico::getDamage() const {
     return damage;
 }
-void Arma::setCritico(int critico) {
-    this->critico = critico;
+bool ItemMagico::isMaldecido() const {
+    return maldecido;
 }
-void Arma::setDamage(int damage) {
-    this->damage = damage;
+void ItemMagico::maldicir() {
+    maldecido = true;
 }
-void Arma::setAtaqueLetal(bool ataqueLetal) {
-    this->ataqueLetal = ataqueLetal;
+string ItemMagico::getCreador() const {
+    return nombreCreador;
 }
-void Arma::setNombre(std::string nombre) {
-    this->nombre = nombre;
+void ItemMagico::setMistico(bool mistico) {
+    this->mistico = mistico;
 }
-std::string Arma::getNombre() {
-    return nombre;
+bool ItemMagico::isMistico() const {
+    return mistico;
+}
+bool ItemMagico::isConsumible() const {
+    return consumible;
+}
+bool ItemMagico::isMaldecido() const {
+    return maldecido;
+}
+tipoAtaque ItemMagico::getAtaque() const {
+    return tAtaque;
+}
+void ItemMagico::setAtaque(tipoAtaque tipoAtaque) {
+    this->tAtaque = tipoAtaque;
+}
+void ItemMagico::setDamage(int dam) {
+    this->damage = dam;
+}
+string ItemMagico::getArma() const {
+    return arma;
+}
+int ItemMagico::calcularDamTotal() const {
+    return hacerDamCritico() + ataqueMistico();
 }
 
-ItemMagico::ItemMagico(std::string nombre, int damage, int nivel, 
-           int critico, bool AtaqueLetal, int poderMagico, bool esConsumible, 
-           bool esMistico, std::string nombreCreador, bool cursed) : 
-    Arma(nombre, damage, nivel, critico, AtaqueLetal), 
-    poderMagico(poderMagico), esConsumible(esConsumible), 
-    esMistico(esMistico), nombreCreador(nombreCreador), cursed(cursed) {
-        if (nombreCreador == "Miguelangel") {
-            setCritico(critico + 10); // bonificación por ser creado por Miguelangel
-        } else if (nombreCreador == "Gandalf") {
-            setDamage(damage + 10); // bonificación por ser creado por Gandalf
-        } else if (nombreCreador == "Pedrito") {
-            setAtaqueLetal(true); // bonificación por ser creado por Pedrito
-        }
-        if (cursed) {
-            setDamage(damage - 15); // penalización por maldición
-        }
-        if (esMistico) {
-            setDamage(damage + 20); // bonificación por ser místico
-        }
-        if (esConsumible) {
-            setDamage(0); // se destruye al ser usado
-        }
-    };
+int ItemMagico::damAtaqueRapido(bool special) const {
+    return 10 + calcularDamTotal();
+}
+int ItemMagico::damAtaqueFuerte(bool special) const {
+    return 10 + calcularDamTotal();
+}
+int ItemMagico::damDefensaYGolpe(bool special) const {
+    return 10 + calcularDamTotal();
+}
 
-int ItemMagico::calcularDamage(Personaje& personaje) {
-    if (!esConsumible){
-        int damTotal = sumarDamCritico();
-        damTotal = damTotal + poderMagico; // daño base + poder mágico
-        return damTotal;
-    } else {
-        // Si es consumible, se puede usar una vez y luego se destruye
-        return 0;
+// ====================== BASTON ==========================
+
+enum Elemento {
+    ABETO,
+    ROBLE,
+    METAL
+};
+
+string asignarElemento(Baston& baston) {
+    // Asigno elemento al azar
+    srand(time(0)); // Inicializar la semilla del generador de números aleatorios
+    int random = rand() % 3;  
+    string element;
+    switch (random) {
+        case 0:
+            element = "Abeto";
+            baston.setDamage(baston.getDamage() + 2);
+            break;
+        case 1:
+            element = "Roble";
+            baston.setDamage(baston.getDamage() + 3);
+            break;
+        case 2:
+            element = "Metal";
+            baston.setDamage(baston.getDamage() + 5);
+            break;
     }
+    return element;
 }
+Baston::Baston()
+    : ItemMagico(10, 5, 0, false, asignarNombreCreador(*this)),
+      element(asignarElemento(*this)) {}
 
-int ItemMagico::sumarDamCritico() {
-    int critico = getCritico();
-    int probCritTotal = critico + poderMagico/4; // bonificación de 10% por ser un item mágico
-    if (rand() % 100 < probCritTotal) {
-        return damage = damage + damage * 0.5;
-    }   
-    return damage + 0;
+void Baston::consumir(Personaje& personaje) {
+    cout << "El baston no se puede consumir." << endl;
 }
-
-void ItemMagico::usarItem(Personaje& personaje) {
-    if (esConsumible) {
-        if (this->getNombre() == "Amuleto"){
-            cout << "El personaje " << personaje.getNombre() << " ha ganado 35 de vida." << endl;
-            personaje.setHP(personaje.getHP() + 35);
-        } else if (this->getNombre() == "Libro de hechizos"){
-            cout << "El personaje " << personaje.getNombre() << " se convierte en legendario." << endl;
-            personaje.setLegendario(true);
-        } else {
-            cout << "El item consumible no es reconocido." << endl;
-        }
-    } else {
-        cout << "El item no es consumible." << endl;
+void Baston::desMaldicir(Personaje& personaje) {
+    // poner que depende quien sea se puede desmaldecir o no
+}
+int Baston::hacerDamCritico() const {
+    srand(time(0)); // Inicializar la semilla del generador de números aleatorios
+    int random = rand() % 100;
+    int critChance = critico + poderMagico/5;
+    if (random < critChance) {
+        return damage * 2;
     }
+    return damage;
 }
-
-void ItemMagico::usoMistico(Personaje& personaje) {
-    if (esMistico) {
-        cout << "El personaje " << personaje.getNombre() << " ha usado el item mistico: " << nombre << endl;
-        cout << "El personaje ha ganado 50 de vida." << endl;
-        personaje.setHP(personaje.getHP() + 50);
-    } else {
-        cout << "El item no es mistico." << endl;
+int Baston::ataqueMistico() const {
+   if (mistico) {
+        return 20;
     }
+    return 0;
 }
 
-void ItemMagico::incrementarPoderMagico(int incremento) {
-    if (ataqueLetal) {
-        poderMagico += incremento;
-        cout << "El poder mágico ha sido incrementado en " << incremento << endl;
-    } else {
-        cout << "El item no es ataque letal." << endl;
-    }
-}
+Baston::~Baston() = default;
 
+// ====================== LIBRO DE HECHIZOS ==========================
