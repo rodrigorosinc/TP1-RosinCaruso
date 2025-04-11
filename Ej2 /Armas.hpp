@@ -5,12 +5,6 @@
 #include <memory>
 #include <random>
 
-enum tipoAtaque{
-    RAPIDO = 1,
-    FUERTE = 2,
-    DEFENSA_Y_GOLPE = 3
-};
-
 class Arma{
     public:
         virtual ~Arma() = default;

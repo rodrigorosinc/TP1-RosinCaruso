@@ -27,9 +27,7 @@ class Personaje {
     protected:
         string nombre;
         string tipo;
-        int nivel;
         int HP;
-        int experiencia;
         bool esLegendario;
         vector<shared_ptr<Arma>> armas;
         int armaEquipada;
@@ -52,6 +50,7 @@ class Personaje {
         bool isLegendario() const;
 
         vector<Arma> getArmas() const;
+        string getTipo() const;
         void setArma(shared_ptr<Arma> arma);
 
         virtual void ataques(Personaje& enemigo) = 0;

@@ -21,24 +21,26 @@ atributos y 5 métodos.
 class ItemMagico : public Arma {
     protected:
         string nombreCreador;
-        string arma; 
-        tipoAtaque tAtaque;
+        string arma;
+
         int damage;
         int poderMagico;
         int critico;
-        bool maldecido;
+
+        bool maldito;
         bool consumible;
         bool mistico;
 
     public:
-        ItemMagico(int damage, int poderMagico, int critico, bool consumible, string nombreCreador);
+        ItemMagico(int damage, int poderMagico, int critico, bool consumible, string nombreCreador, 
+            string arma);
         virtual ~ItemMagico() = default;
         
-        virtual void consumir(Personaje& personaje) = 0;
+        virtual void consumir(shared_ptr<Personaje> personaje) = 0;
         virtual int hacerDamCritico() const = 0;
         virtual int ataqueMistico() const = 0;     
-        virtual void desMaldicir(Personaje& personaje) = 0; 
-
+        virtual void purificar(shared_ptr<Personaje> personaje) = 0; 
+        virtual bool puedePurificar(shared_ptr<Personaje> personaje) const = 0;
         
         int calcularDamTotal() const;
         int damAtaqueRapido(bool special) const override;
@@ -49,12 +51,11 @@ class ItemMagico : public Arma {
         bool isMaldecido() const override;
         
         string getCreador() const;
-        tipoAtaque getAtaque() const;
         string getArma() const;
         
         void setDamage(int damage);
-        void setAtaque(tipoAtaque tipoAtaque);
         void setMistico(bool mistico);
+        void setCreador(string creador);
         void maldicir();
         bool isMistico() const;
         bool isMaldecido() const;
@@ -64,42 +65,81 @@ class ItemMagico : public Arma {
 class Baston : public ItemMagico {
     private:
         string element;
+        float largo;
+        int peso;
+        float lentitud;
+        bool reforjado;
+
     public:
         Baston();
         ~Baston() override;
 
-        void consumir(Personaje& personaje) override;
+        void consumir(shared_ptr<Personaje> personaje) override;
         int hacerDamCritico() const override;
         int ataqueMistico() const override;
-        void desMaldicir(Personaje& personaje) override;
+        void purificar(shared_ptr<Personaje> personaje) override;
+        void reforjar();
+        bool puedePurificar(shared_ptr<Personaje> personaje) const override;
+        
+        void setLargo(int largo);
+        void setPeso(int peso);
 };
 
 class LibroDeHechizos : public ItemMagico {
+    private:
+        int additionalDamage;
+        int additionalCritico;
+        int additionalPoderMagico;
+        bool legendarizado;
+        int hojas;
+    
     public:
         LibroDeHechizos();
         ~LibroDeHechizos() override;
-        void consumir(Personaje& personaje) override;
+
+        void consumir(shared_ptr<Personaje> personaje) override;
         int hacerDamCritico() const override;
         int ataqueMistico() const override;
-        void desMaldicir(Personaje& personaje) override;
+        void purificar(shared_ptr<Personaje> personaje) override;
+        void legendarizar(shared_ptr<Personaje> personaje);
+        bool puedePurificar(shared_ptr<Personaje> personaje) const override;
 };
 
 class Pocion : public ItemMagico {
+    private:
+        int addHp;
+        int subHp;
+        bool isGood;
+        bool seCayo;
+        int probSeCaiga;
+
     public:
         Pocion();
         ~Pocion() override;
-        void consumir(Personaje& personaje) override;
+        void consumir(shared_ptr<Personaje> personaje) override;
         int hacerDamCritico() const override;
         int ataqueMistico() const override;
-        void desMaldicir(Personaje& personaje) override;
+        void purificar(shared_ptr<Personaje> personaje) override;
+        bool puedePurificar(shared_ptr<Personaje> personaje) const override;
+
+        bool verificarCaida(shared_ptr<Personaje> personaje) const;
 };
 
 class Amuleto : public ItemMagico {
+    private:
+        int escudo;
+        bool dobleMagia;
+        int addHp;
+        bool legendarizado;
+        int additionalDamage;
+
     public:
         Amuleto();
         ~Amuleto() override;
-        void consumir(Personaje& personaje) override;
+        void consumir(shared_ptr<Personaje> personaje) override;
         int hacerDamCritico() const override;
         int ataqueMistico() const override;
-        void desMaldicir(Personaje& personaje) override;
+        void purificar(shared_ptr<Personaje> personaje) override;
+        bool puedePurificar(shared_ptr<Personaje> personaje) const override;
+        void legendarizar(shared_ptr<Personaje> personaje);
 };
