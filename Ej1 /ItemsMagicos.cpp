@@ -174,7 +174,7 @@ void Baston::setPeso(int peso){
     this->peso = peso;
 }
 
-void Baston::setLargo(int largo){
+void Baston::setLargo(float largo){
     this->largo = largo;
 }
 
