@@ -14,5 +14,8 @@ class Arma{
         virtual int damDefensaYGolpe(bool special) const = 0;
         virtual bool isMaldecido() const = 0;
         virtual std::string creadoPor() const = 0;
+        virtual std::string getTipo() const = 0;
+        virtual void setDamage(int damage) = 0;
+        virtual void setMaldito(bool maldecido) = 0;
 };
 

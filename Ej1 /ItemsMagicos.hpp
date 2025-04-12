@@ -11,6 +11,7 @@ class ItemMagico : public Arma {
     protected:
         std::string nombreCreador;
         std::string arma;
+        std::string tipo;
 
         int damage;
         int poderMagico;
@@ -22,7 +23,7 @@ class ItemMagico : public Arma {
 
     public:
         ItemMagico(int damage, int poderMagico, int critico, bool consumible, std::string nombreCreador, 
-            std::string arma);
+            std::string arma, std::string tipo);
         virtual ~ItemMagico() = default;
         
         virtual void consumir(std::shared_ptr<Personaje> personaje) = 0;
@@ -35,15 +36,19 @@ class ItemMagico : public Arma {
         int damAtaqueRapido(bool special) const override;
         int damAtaqueFuerte(bool special) const override;
         int damDefensaYGolpe(bool special) const override;
-        
+        void setDamage(int damage) override;
+        void setMaldito(bool maldecido) override;
+
         int getDamage() const override;
         bool isMaldecido() const override;
         
         std::string getCreador() const;
         std::string getArma() const;
+        std::string getTipo() const;
         
         void setDamage(int damage);
         void setMistico(bool mistico);
+
         void setCreador(std::string creador);
         void maldicir();
         bool isMistico() const;

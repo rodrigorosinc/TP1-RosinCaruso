@@ -9,6 +9,8 @@ enum NombreCreador {
     DR_STRANGE 
 };
 
+using namespace std;
+
 string asignarNombreCreador(ItemMagico& item) {
     // Asigno creador al azar
     srand(time(0)); // Inicializar la semilla del generador de números aleatorios
@@ -47,8 +49,8 @@ bool asignarMaldecido(ItemMagico& item) {
 ItemMagico::~ItemMagico() = default;
 
 ItemMagico::ItemMagico(int damage, int critico, int poderMagico,
-    bool consumible, string nombreCreador, string arma)
-    : damage(damage), critico(critico), poderMagico(poderMagico),
+    bool consumible, string nombreCreador, string arma, string tipo)
+    : damage(damage), critico(critico), poderMagico(poderMagico), tipo(tipo),
     consumible(consumible), mistico(false), maldito(asignarMaldecido(*this)),
     nombreCreador(asignarNombreCreador(*this)) {}
 
@@ -56,6 +58,11 @@ ItemMagico::ItemMagico(int damage, int critico, int poderMagico,
 int ItemMagico::getDamage() const {
     return damage;
 }
+
+string ItemMagico::getTipo() const {
+    return tipo;
+}
+
 bool ItemMagico::isMaldecido() const {
     return maldito;
 }
@@ -82,6 +89,12 @@ void ItemMagico::setCreador(string creador) {
 }
 void ItemMagico::setDamage(int dam) {
     this->damage = dam;
+}
+void ItemMagico::setDamage(int damage) {
+    this->damage = damage;
+}
+void ItemMagico::setMaldito(bool maldecido) {
+    this->maldito = maldecido;
 }
 string ItemMagico::getArma() const {
     return arma;
@@ -137,7 +150,7 @@ string asignarElemento(Baston& baston) {
 }
 
 Baston::Baston()
-    : ItemMagico(10, 50, 0, false, asignarNombreCreador(*this), "Baston"),
+    : ItemMagico(10, 50, 0, false, asignarNombreCreador(*this), "Baston", "Item Magico"),
       element(asignarElemento(*this)) {
         lentitud = round((largo / peso) * 10) / 10.0;
         reforjado = false;
@@ -199,7 +212,7 @@ Baston::~Baston() = default;
 // ====================== LIBRO DE HECHIZOS ==========================
 
 LibroDeHechizos::LibroDeHechizos() :
-    ItemMagico(7, 10, 100, true, "El Universo", "Libro de Hechizos"), legendarizado(false){
+    ItemMagico(7, 10, 100, true, "El Universo", "Libro de Hechizos", "Item Magico"), legendarizado(false){
         srand(time(0)); // Inicializar la semilla del generador de números aleatorios
         int random = rand() % 6;
         if (random == 0) {
@@ -299,7 +312,7 @@ void LibroDeHechizos::legendarizar(shared_ptr<Personaje> personaje) {
 
 LibroDeHechizos::~LibroDeHechizos() = default;
 
-// ====================== ITEM COMBATE ==========================
+// ====================== Pocion ==========================
 
 enum creadorPocion {
     HECHICERO,
@@ -330,7 +343,7 @@ string asignarCreadorPocion(Pocion& pocion) {
 }
 
 Pocion::Pocion():
-ItemMagico(5, 35, 35, true, asignarCreadorPocion(*this), "Pocion"), isGood(false), seCayo(false) {
+ItemMagico(5, 35, 35, true, asignarCreadorPocion(*this), "Pocion", "Item Magico"), isGood(false), seCayo(false) {
         srand(time(0)); // Inicializar la semilla del generador de números aleatorios
         probSeCaiga =  rand() % 15;
         int random = rand() % 3;
@@ -399,7 +412,7 @@ Pocion::~Pocion() = default;
 // ====================== AMULETO ==========================
 
 Amuleto::Amuleto() :
-    ItemMagico(5, 20, 0, true, "Desconocido", "Amuleto") {
+    ItemMagico(5, 20, 0, true, "Desconocido", "Amuleto", "Item Magico") {
         maldito = false;
         mistico = false;
         escudo = 30;
