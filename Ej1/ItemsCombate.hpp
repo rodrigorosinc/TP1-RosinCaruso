@@ -1,5 +1,5 @@
+#pragma once
 #include "Armas.hpp"
-#include "ItemsMagicos.hpp"
 #include "Personajes.hpp"
 
 
@@ -11,10 +11,13 @@ class ArmaCombate : public Arma {
         std::string arma;
         std::string tipo;
         bool legendaria;
+        bool maldita;
     public:
+    // Constructor en el mismo orden:
         ArmaCombate(std::string arma, int damage, int sharpness, int letalidad, std::string tipo);
-        virtual ~ArmaCombate() = default;
-        
+        virtual ~ArmaCombate();
+        virtual int calcularDamage() const = 0;
+        virtual int calcularAddedDamage() const = 0;
         int calcularDamTotal() const;
         int damAtaqueRapido() const override;
         int damAtaqueFuerte() const override;
@@ -22,12 +25,9 @@ class ArmaCombate : public Arma {
         int getDamage() const override;
         std::string getNombreItem() const override;
         void setDamage(int damage) override;
-        bool isMaldecido() const override;
-
-        virtual int calcularDamage() const = 0;
-        virtual int calcularAddedDamage() const = 0;
-
-        std::string creadoPor() const override;
+        std::string getTipo() const override;
+        void setMaldito(bool maldecir) override;
+        bool isMaldito() const override;
 };
 
 class HachaSimple : public ArmaCombate {
@@ -39,7 +39,7 @@ class HachaSimple : public ArmaCombate {
         bool quebrada;
     public:
         HachaSimple();
-        ~HachaSimple() override = default;
+        ~HachaSimple() override;
 
         int calcularDamage() const override;
         int calcularAddedDamage() const override;
@@ -57,7 +57,7 @@ class HachaDoble : public ArmaCombate {
         bool quebrada;
     public:
         HachaDoble();
-        ~HachaDoble() override = default;
+        ~HachaDoble() override;
 
         int calcularDamage() const override;
         int calcularAddedDamage() const override;
@@ -77,7 +77,7 @@ class Espada : public ArmaCombate {
 
     public:
         Espada();
-        ~Espada() override = default;
+        ~Espada() override;
 
         int calcularDamage() const override;
         int calcularAddedDamage() const override;
@@ -96,7 +96,7 @@ class Lanza : public ArmaCombate {
 
     public:
         Lanza();
-        ~Lanza() override = default;
+        ~Lanza() override;
 
         int calcularDamage() const override;
         int calcularAddedDamage() const override;
@@ -114,7 +114,7 @@ class Garrote : public ArmaCombate {
         int largoPinchos;
     public:
         Garrote();
-        ~Garrote() override = default;
+        ~Garrote() override;
 
         int calcularDamage() const override;
         int calcularAddedDamage() const override;

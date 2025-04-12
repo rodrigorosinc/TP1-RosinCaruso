@@ -14,18 +14,19 @@ derivadas deberán tener al menos 5 atributos y 5 métodos.*/
 
 class Guerreros : public Personaje {
     protected:
-        std::string nombre;
-        std::string tipo;
-        int hp;
+        std::string nombre;  // Mover primero
+        int hp;             // Luego hp
+        std::vector<std::shared_ptr<Arma>> armas;  // Luego armas
+        std::shared_ptr<Arma> armaActual;          // Luego armaActual
+        std::string tipo;    // Finalmente tipo
         int fuerzaDelRey;
         bool miTurno;
         bool legendario;
-        std::vector<std::shared_ptr<Arma>> armas;
-        std::shared_ptr<Arma> armaActual;
+
 
     public:
-        Guerreros(std::string nombre, int hp, std::vector<std::shared_ptr<Arma>> armas, std::shared_ptr<Arma> armaActual, std::string tipo);
-        virtual ~Guerreros() = default;
+        Guerreros(std::string myNombre, int myHp, std::vector<std::shared_ptr<Arma>> myArmas, std::shared_ptr<Arma> myArmaActual);
+        virtual ~Guerreros();
 
         void ataqueRapido(std::shared_ptr<Personaje> enemigo) override;
         void ataqueFuerte(std::shared_ptr<Personaje> enemigo) override;
@@ -42,6 +43,7 @@ class Guerreros : public Personaje {
         void setFuerzaDelRey(int newFDR);
         void setTurno(bool turno);
         void setArmaActual(std::shared_ptr<Arma> arma);
+        void setLegendario(bool legendario);
 
         bool isLegendario() const;
 };
@@ -55,7 +57,7 @@ class Barbaro : public Guerreros {
         bool berserker;
     public:
         Barbaro(std::string nombre, int hp, std::vector<std::shared_ptr<Arma>> armas, std::shared_ptr<Arma> armaActual);
-        ~Barbaro() override = default;
+        ~Barbaro() override;
 
         void gritar(std::shared_ptr<Personaje> enemigo);
         void embestir(std::shared_ptr<Personaje> enemigo);
@@ -73,7 +75,7 @@ class Paladin : public Guerreros {
         int justicia;
     public:
         Paladin(std::string nombre, int hp, std::vector<std::shared_ptr<Arma>> armas, std::shared_ptr<Arma> armaActual);
-        ~Paladin() override = default;
+        ~Paladin() override;
 
         void espadazo(std::shared_ptr<Personaje> enemigo);
         void ponerYelmo();
@@ -91,7 +93,7 @@ class Caballero : public Guerreros {
         std::string unidad;
     public:
         Caballero(std::string nombre, int hp, std::vector<std::shared_ptr<Arma>> armas, std::shared_ptr<Arma> armaActual);
-        ~Caballero() override = default;
+        ~Caballero() override;
 
         void curarse();
         void usarArmadura();
@@ -109,7 +111,7 @@ class Mercenario : public Guerreros {
         bool jinete;
     public:
         Mercenario(std::string nombre, int hp, std::vector<std::shared_ptr<Arma>> armas, std::shared_ptr<Arma> armaActual);
-        ~Mercenario() override = default;
+        ~Mercenario() override;
 
         void robar(std::shared_ptr<Personaje> enemigo);
         void atacarPorDinero(std::shared_ptr<Personaje> enemigo);
@@ -127,7 +129,7 @@ class Gladiador : public Guerreros {
         bool voluntadEspartana;
     public:
         Gladiador(std::string nombre, int hp, std::vector<std::shared_ptr<Arma>> armas, std::shared_ptr<Arma> armaActual);
-        ~Gladiador() override = default;
+        ~Gladiador() override;
 
         void gritar(std::shared_ptr<Personaje> enemigo);
         void chocarCabeza(std::shared_ptr<Personaje> enemigo);

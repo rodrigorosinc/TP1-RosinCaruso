@@ -1,6 +1,5 @@
 #include "ItemsCombate.hpp"
 
-
 using namespace std;
 
 /*
@@ -8,10 +7,11 @@ ii. Armas de Combate: hacha simple, hacha doble, espada, lanza y garrote.
 Estas armas derivan de una interfaz única, de la cual se desprenden dos clases 
 abstractas. Sea creativo, las clases derivadas deberán tener al menos 5 
 atributos y 5 métodos.
-*/
-
+*/ 
 ArmaCombate::ArmaCombate(std::string arma, int damage, int sharpness, int letalidad, std::string tipo)
-    : arma(arma), damage(damage), sharpness(sharpness), letalidad(letalidad), tipo(tipo), legendaria(false) {}
+: letalidad(letalidad), damage(damage), sharpness(sharpness), arma(arma), tipo(tipo) {}
+
+ArmaCombate::~ArmaCombate() = default;
 
 int ArmaCombate::calcularDamTotal() const {
     return calcularDamage() + calcularAddedDamage();
@@ -31,12 +31,17 @@ int ArmaCombate::damDefensaYGolpe() const {
 int ArmaCombate::getDamage() const {
     return damage;
 }
-bool ArmaCombate::isMaldecido() const {
-    return false;
+string ArmaCombate::getTipo() const {
+    return tipo;
 }
-
 void ArmaCombate::setDamage(int dam) {
     damage = dam;
+}
+void ArmaCombate::setMaldito(bool maldecir) {
+    maldita = maldecir;
+}
+bool ArmaCombate::isMaldito() const {
+    return maldita;
 }
 
 // ==================== HachaSimple ====================
@@ -77,6 +82,7 @@ HachaSimple::HachaSimple()
         quebrada = false;           
     }
 
+HachaSimple::~HachaSimple() = default;
 int HachaSimple::calcularDamage() const {
     int damTotal = damage;
     if (quebrada) {
@@ -166,7 +172,7 @@ HachaDoble::HachaDoble() : ArmaCombate("Hacha Doble", 11, 2, 5, "Arma Combate") 
         quebrada = false;
     }
 }
-
+HachaDoble::~HachaDoble() = default;
 int HachaDoble::calcularDamage() const {
     int damTotal = damage;
     if (quebrada) {
@@ -266,6 +272,8 @@ Espada::Espada() : ArmaCombate("Espada", 12, 5, 2, "Arma Combate") {
     }
 }
 
+Espada::~Espada() = default;
+
 int Espada::calcularDamage() const {
     int damTotal = damage;
     if (doblada) {
@@ -327,7 +335,7 @@ Lanza::Lanza() : ArmaCombate("Lanza", 7, 3, 3, "Arma Combate") {
     peso = 3;
     addletalidad = 2;
 }
-
+Lanza::~Lanza() = default;
 int Lanza::calcularDamage() const {
     int damTotal = damage;
     if (headshot) {
@@ -375,6 +383,7 @@ Garrote::Garrote() : ArmaCombate("Garrote", 8, 4, 4, "Arma Combate") {
     addletalidad = 2;
     largoPinchos = 3;
 }
+Garrote::~Garrote() = default;
 
 int Garrote::calcularDamage() const {
     int damTotal = damage;
@@ -402,3 +411,4 @@ void Garrote::envenenarPinchos() {
     envenenada = true;
     addletalidad += 2;
 }
+

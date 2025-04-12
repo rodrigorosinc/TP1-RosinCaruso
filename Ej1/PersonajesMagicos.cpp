@@ -1,17 +1,15 @@
-#pragma once
 #include "PersonajesMagicos.hpp"
 #include "ItemsMagicos.hpp"
 #include "ItemsCombate.hpp"
 
 using namespace std;
 
-Magos::Magos(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual, string tipo)
-    : nombre(nombre), hp(hp), armas(armas), armaActual(armaActual), tipo(tipo) {}
-
+Magos::Magos(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
+    : tipo("Mago"), nombre(myNombre), hp(myHp), armas(myArmas), armaActual(myArmaActual) {}
 Magos::~Magos() = default;
 
 void Magos::ataqueRapido(shared_ptr<Personaje> enemigo) {
-    int damage = armaActual->damAtaqueRapido(false);
+    int damage = armaActual->damAtaqueRapido();
     if (armaActual->getTipo() == "Item Magico") {
         damage += damage/3;
     }
@@ -21,7 +19,7 @@ void Magos::ataqueRapido(shared_ptr<Personaje> enemigo) {
     enemigo->setHP(enemigo->getHP() - damage);
 }
 void Magos::ataqueFuerte(shared_ptr<Personaje> enemigo) {
-    int damage = armaActual->damAtaqueFuerte(false);
+    int damage = armaActual->damAtaqueFuerte();
     if (armaActual->getTipo() == "Item Magico") {
         damage += damage/3;
     }
@@ -31,7 +29,7 @@ void Magos::ataqueFuerte(shared_ptr<Personaje> enemigo) {
     enemigo->setHP(enemigo->getHP() - damage);
 }
 void Magos::defensaYGolpe(shared_ptr<Personaje> enemigo) {
-    int damage = armaActual->damDefensaYGolpe(false);
+    int damage = armaActual->damDefensaYGolpe();
     if (armaActual->getTipo() == "Item Magico") {
         damage += damage/3;
     }
@@ -74,7 +72,7 @@ int Magos::getMana() const {
 // ======================== Hechicero ========================
 
 Hechicero::Hechicero(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
-    : Magos(nombre, hp, armas, armaActual, "Mago") {
+    : Magos(nombre, hp, armas, armaActual) {
         srand(time(0));
         int randomNum = rand();
         tienePocionEscudo = randomNum % 2 == 0;
@@ -85,7 +83,9 @@ Hechicero::Hechicero(string nombre, int hp, vector<shared_ptr<Arma>> armas, shar
         mana = 100;
         int randomNum2 = rand();
         legendario = randomNum2 % 10 == 0;
-    }
+}
+Hechicero::~Hechicero() = default;
+
 void Hechicero::pocionEscudo() {
     if (tienePocionEscudo) {
         cout << "Usando pocion de escudo" << endl;
@@ -147,7 +147,7 @@ void Hechicero::pocionX2() {
 // ======================== Conjurador ========================
 
 Conjurador::Conjurador(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
-    : Magos(nombre, hp, armas, armaActual, "Mago") {
+    : Magos(nombre, hp, armas, armaActual) {
         srand(time(0));
         int randomNum = rand();
         conjuroOscuro = randomNum % 2 == 0;
@@ -157,7 +157,8 @@ Conjurador::Conjurador(string nombre, int hp, vector<shared_ptr<Arma>> armas, sh
         purificado = false;
         mana = 90;
 
-    }
+}
+Conjurador::~Conjurador() = default;
 void Conjurador::conjurarOscuro(shared_ptr<Personaje> enemigo) {
     if (conjuroOscuro) {
         cout << "Conjurando conjuro oscuro" << endl;
@@ -210,7 +211,7 @@ void Conjurador::purificar(shared_ptr<Personaje> enemigo) {
         srand(time(0));
         int randomNum = rand() % armas.size();
         shared_ptr<Arma> arma = armas[randomNum];
-        if (arma->isMaldecido()) {
+        if (arma->isMaldito()) {
             arma->setMaldito(false);
             cout << "Arma purificada" << endl;
         } else {
@@ -224,7 +225,7 @@ void Conjurador::purificar(shared_ptr<Personaje> enemigo) {
 // ======================= Brujo ========================
 
 Brujo::Brujo(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
-    : Magos(nombre, hp, armas, armaActual, "Mago") {
+    : Magos(nombre, hp, armas, armaActual) {
         srand(time(0));
         int randomNum = rand();
         embrujado = randomNum % 3 == 0;
@@ -233,7 +234,8 @@ Brujo::Brujo(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<A
         hiperMetamorfosis = randomNum % 11 == 0;
         yinYang = randomNum % 13 == 0;
         mana = 110;
-    }
+}
+Brujo::~Brujo() = default;
 void Brujo::embrujar(shared_ptr<Personaje> enemigo) {
     if (embrujado) {
         cout << "Embrujando enemigo" << endl;
@@ -288,7 +290,7 @@ void Brujo::recuperse() {
 // ==================== Nigromante ===================
 
 Nigromante::Nigromante(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
-    : Magos(nombre, hp, armas, armaActual, "Mago") {
+    : Magos(nombre, hp, armas, armaActual) {
         srand(time(0));
         int randomNum = rand();
         invocoEspectro = randomNum % 2 == 0;
@@ -297,7 +299,8 @@ Nigromante::Nigromante(string nombre, int hp, vector<shared_ptr<Arma>> armas, sh
         invocoEsqueleto = randomNum % 7 == 0;
         invocoVampiro = randomNum % 11 == 0;
         mana = 95;
-    }
+}
+Nigromante::~Nigromante() = default;
 void Nigromante::invocarEspectro(shared_ptr<Personaje> enemigo) {
     if (invocoEspectro) {
         cout << "Invocando espectro" << endl;

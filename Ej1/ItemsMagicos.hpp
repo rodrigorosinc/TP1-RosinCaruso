@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Armas.hpp"
 #include "Personajes.hpp"
 
@@ -12,16 +11,15 @@ class ItemMagico : public Arma {
         int damage;
         int poderMagico;
         int critico;
+        bool consumible;
         std::string nombreCreador;
         std::string arma;
         std::string tipo;
         bool maldito;
-        bool consumible;
         bool mistico;
 
     public:
-        ItemMagico(int damage, int poderMagico, int critico, bool consumible, std::string nombreCreador, 
-            std::string arma, std::string tipo);
+        ItemMagico(int myDamage, int myPoderMagico, int myCritico, bool myConsumible, std::string myArma);
         virtual ~ItemMagico();
         
         virtual void consumir(std::shared_ptr<Personaje> personaje) = 0;
@@ -35,12 +33,11 @@ class ItemMagico : public Arma {
         int damAtaqueFuerte() const override;
         int damDefensaYGolpe() const override;
         void setDamage(int damage) override;
-        void setMaldito(bool maldecido) override;
         std::string getNombreItem() const override;
-
+        void setMaldito(bool maldecir) override;
+        bool isMaldito() const override;
         int getDamage() const override;
         
-        bool isMaldito() const;
         
         std::string getCreador() const;
         std::string getArma() const;
@@ -49,7 +46,7 @@ class ItemMagico : public Arma {
         void setMistico(bool mistico);
 
         void setCreador(std::string creador);
-        void maldicir();
+        void maldecir();
         bool isMistico() const;
         bool isConsumible() const;
 };

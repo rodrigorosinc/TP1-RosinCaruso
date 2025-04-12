@@ -6,18 +6,18 @@
 
 class Magos : public Personaje {
     protected:
-        std::string nombre;
         std::string tipo;
+        std::string nombre;
         int hp;
+        std::vector<std::shared_ptr<Arma>> armas;
+        std::shared_ptr<Arma> armaActual;
         int mana;
         bool miTurno;
         bool legendario;
-        std::vector<std::shared_ptr<Arma>> armas;
-        std::shared_ptr<Arma> armaActual;
 
     public:
-        Magos(std::string nombre, int hp, std::vector<std::shared_ptr<Arma>> armas, std::shared_ptr<Arma> armaActual, std::string tipo);
-        virtual ~Magos() = default;
+        Magos(std::string myNombre, int myHp, std::vector<std::shared_ptr<Arma>> myArmas, std::shared_ptr<Arma> myArmaActual);
+        virtual ~Magos();
 
         void ataqueRapido(std::shared_ptr<Personaje> enemigo) override;
         void ataqueFuerte(std::shared_ptr<Personaje> enemigo) override;
@@ -48,7 +48,7 @@ class Hechicero : public Magos {
         bool tienePocionX2;
     public:
         Hechicero(std::string nombre, int hp, std::vector<std::shared_ptr<Arma>> armas, std::shared_ptr<Arma> armaActual);
-        ~Hechicero() override = default;
+        ~Hechicero() override;
 
         void pocionEscudo();
         void pocionRecuperacion();
@@ -67,7 +67,7 @@ class Conjurador : public Magos {
 
     public:
         Conjurador(std::string nombre, int hp, std::vector<std::shared_ptr<Arma>> armas, std::shared_ptr<Arma> armaActual);
-        ~Conjurador() override = default;
+        ~Conjurador() override;
 
         void conjurarOscuro(std::shared_ptr<Personaje> enemigo);
         void conjurarLuminoso(std::shared_ptr<Personaje> enemigo);
@@ -86,7 +86,7 @@ class Brujo : public Magos {
 
     public:
         Brujo(std::string nombre, int hp, std::vector<std::shared_ptr<Arma>> armas, std::shared_ptr<Arma> armaActual);
-        ~Brujo() override = default;
+        ~Brujo() override;
 
         void embrujar(std::shared_ptr<Personaje> enemigo);
         void hacerAbracadabra(std::shared_ptr<Personaje> enemigo);
@@ -104,7 +104,7 @@ class Nigromante : public Magos {
         bool invocoVampiro;
     public:
         Nigromante(std::string nombre, int hp, std::vector<std::shared_ptr<Arma>> armas, std::shared_ptr<Arma> armaActual);
-        ~Nigromante() override = default;
+        ~Nigromante() override;
 
         void invocarEspectro(std::shared_ptr<Personaje> enemigo);
         void invocarFantasma(std::shared_ptr<Personaje> enemigo);

@@ -4,12 +4,12 @@
 
 using namespace std;
 
-Guerreros::Guerreros(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual, string tipo)
-    : nombre(nombre), hp(hp), armas(armas), armaActual(armaActual), tipo(tipo) {}
+Guerreros::Guerreros(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
+    : nombre(myNombre), hp(myHp), armas(myArmas), armaActual(myArmaActual), tipo("Guerrero") {}
 Guerreros::~Guerreros() = default;
 
 void Guerreros::ataqueRapido(shared_ptr<Personaje> enemigo) {
-    int damage = armaActual->damAtaqueRapido(false);
+    int damage = armaActual->damAtaqueRapido();
     if (armaActual->getTipo() == "Arma Combate") {
         damage += damage/3;
     }
@@ -20,7 +20,7 @@ void Guerreros::ataqueRapido(shared_ptr<Personaje> enemigo) {
 }
 
 void Guerreros::ataqueFuerte(shared_ptr<Personaje> enemigo) {
-    int damage = armaActual->damAtaqueFuerte(false);
+    int damage = armaActual->damAtaqueFuerte();
     if (armaActual->getTipo() == "Arma Combate") {
         damage += damage/3;
     }
@@ -31,7 +31,7 @@ void Guerreros::ataqueFuerte(shared_ptr<Personaje> enemigo) {
 }
 
 void Guerreros::defensaYGolpe(shared_ptr<Personaje> enemigo) {
-    int damage = armaActual->damDefensaYGolpe(false);
+    int damage = armaActual->damDefensaYGolpe();
     if (armaActual->getTipo() == "Arma Combate") {
         damage += damage/3;
     }
@@ -70,8 +70,11 @@ void Guerreros::setArmaActual(shared_ptr<Arma> arma) {
 bool Guerreros::isLegendario() const {
     return legendario;
 }   
+void Guerreros::setLegendario(bool makeLegendario) {
+    legendario = makeLegendario;
+}
 void Guerreros::removerArma(int index) {
-    if (index >= 0 && index < armas.size()) {
+    if (index >= 0 && index < (int) armas.size()) {
         armas.erase(armas.begin() + index);
     } else {
         cout << "Index out of range" << endl;
@@ -81,7 +84,7 @@ void Guerreros::removerArma(int index) {
 // ======================= Barbaro ========================
 
 Barbaro::Barbaro(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
-    : Guerreros(nombre, hp, armas, armaActual, "Guerrero") {
+    : Guerreros(nombre, hp, armas, armaActual) {
         srand(time(0));
         int randomNum = rand(); 
         peso = randomNum % 100 + 1;
@@ -96,8 +99,8 @@ Barbaro::Barbaro(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_p
         } else {
             setLegendario(false);
         }
-    }
-
+}
+Barbaro::~Barbaro() = default;
 void Barbaro::gritar(shared_ptr<Personaje> enemigo) {
     if (lider) {
         cout << "AAAAAAAAAAAAAAAAAAAAAAAA!!!!!!" << endl;
@@ -144,7 +147,7 @@ void Barbaro::poderBerserker(shared_ptr<Personaje> enemigo) {
 // ======================== Paladin ========================
 
 Paladin::Paladin(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
-    : Guerreros(nombre, hp, armas, armaActual, "Guerrero") {
+    : Guerreros(nombre, hp, armas, armaActual) {
         srand(time(0));
         int randomNum = rand();
         espadaDeLaVerdad = true;
@@ -159,7 +162,8 @@ Paladin::Paladin(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_p
         } else {
             setLegendario(false);
         }
-    }
+}
+Paladin::~Paladin() = default;
 void Paladin::espadazo(shared_ptr<Personaje> enemigo) {
     if (espadaDeLaVerdad) {
         cout << "Usando espada de la verdad" << endl;
@@ -214,7 +218,7 @@ enum Unidad {
 };
 
 Caballero::Caballero(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
-    : Guerreros(nombre, hp, armas, armaActual, "Guerrero") {
+    : Guerreros(nombre, hp, armas, armaActual) {
         srand(time(0));
         int randomNum = rand();
         switch (randomNum % 4) {
@@ -243,6 +247,7 @@ Caballero::Caballero(string nombre, int hp, vector<shared_ptr<Arma>> armas, shar
             setLegendario(false);
         }
 }
+Caballero::~Caballero() = default;
 
 void Caballero::curarse() {
     if (curacion > 0) {
@@ -301,7 +306,7 @@ void Caballero::cambiarUnidad(string nuevaUnidad) {
 // ======================== Mercenario ========================
 
 Mercenario::Mercenario(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
-    : Guerreros(nombre, hp, armas, armaActual, "Guerrero") {
+    : Guerreros(nombre, hp, armas, armaActual) {
         srand(time(0));
         int randomNum = rand();
         fuerzaDelRey = 15;
@@ -316,14 +321,15 @@ Mercenario::Mercenario(string nombre, int hp, vector<shared_ptr<Arma>> armas, sh
         } else {
             setLegendario(false);
         }
-    }
+}
+Mercenario::~Mercenario() = default;
 
 void Mercenario::robar(shared_ptr<Personaje> enemigo) {
     if (apetitoDeDinero > 50) {
         cout << "Robando enemigo" << endl;
         auto armas = enemigo->getArmas();
         if (!armas.empty()) {
-            int randomIndex = rand() % armas.size();
+            int randomIndex = rand() % (int)armas.size();
             shared_ptr<Arma> armaRobada = armas[randomIndex];
             cout << "Robando arma: " << armaRobada->getNombreItem() << endl;
             enemigo->removerArma(randomIndex);
@@ -378,23 +384,23 @@ void Mercenario::montarJinete() {
 // ======================== Gladiador ========================
 
 Gladiador::Gladiador(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
-    : Guerreros(nombre, hp, armas, armaActual, "Guerrero") {
+    : Guerreros(nombre, hp, armas, armaActual) {
         srand(time(0));
         int randomNum = rand();
         fuerzaDelRey = 20;
-        bool espartano = randomNum % 2 == 0;
+        espartano = randomNum % 2 == 0;
         fuerzaEspartana = randomNum % 100 + 1;
         resistenciaEspartana = randomNum % 100 + 1;
-        bool sangreEspartana = randomNum % 2 == 0;
-        bool voluntadEspartana = randomNum % 2 == 0;
+        sangreEspartana = randomNum % 2 == 0;
+        voluntadEspartana = randomNum % 2 == 0;
         int randomNum2 = rand();
         if (randomNum2 % 5 == 0) {
             setLegendario(true);
         } else {
             setLegendario(false);
         }
-    }
-
+}
+Gladiador::~Gladiador() = default;
 void Gladiador::gritar(shared_ptr<Personaje> enemigo) {
     if (espartano) {
         cout << "ESPARTANOOOS AUU AUU AUUUUU!!!!!!" << endl;
@@ -436,7 +442,7 @@ void Gladiador::xerxes(shared_ptr<Personaje> enemigo) {
     }
 }
 void Gladiador::pasarPorElFuego(shared_ptr<Personaje> enemigo) {
-    if (voluntadEspartana) {
+    if (voluntadEspartana && sangreEspartana && espartano) {
         cout << "Pasando por el fuego" << endl;
         enemigo->setHP(enemigo->getHP() - 30 - resistenciaEspartana/2);
         voluntadEspartana = false;

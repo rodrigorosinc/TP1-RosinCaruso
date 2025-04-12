@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include <random>
+#include "Armas.hpp"
 
 class Personaje {
     public: 
