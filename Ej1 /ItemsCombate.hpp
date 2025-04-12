@@ -21,6 +21,7 @@ class ArmaCombate : public Arma {
         int damAtaqueFuerte(bool special) const override;
         int damDefensaYGolpe(bool special) const override;
         int getDamage() const override;
+        std::string getNombreItem() const override;
         void setDamage(int damage) override;
         bool isMaldecido() const override;
 

@@ -15,6 +15,9 @@ void Magos::ataqueRapido(shared_ptr<Personaje> enemigo) {
     if (armaActual->getTipo() == "Item Magico") {
         damage += damage/3;
     }
+    if (this->isLegendario()) {
+        damage += damage/2;
+    }
     enemigo->setHP(enemigo->getHP() - damage);
 }
 void Magos::ataqueFuerte(shared_ptr<Personaje> enemigo) {
@@ -22,12 +25,18 @@ void Magos::ataqueFuerte(shared_ptr<Personaje> enemigo) {
     if (armaActual->getTipo() == "Item Magico") {
         damage += damage/3;
     }
+    if (this->isLegendario()) {
+        damage += damage/2;
+    }
     enemigo->setHP(enemigo->getHP() - damage);
 }
 void Magos::defensaYGolpe(shared_ptr<Personaje> enemigo) {
     int damage = armaActual->damDefensaYGolpe(false);
     if (armaActual->getTipo() == "Item Magico") {
         damage += damage/3;
+    }
+    if (this->isLegendario()) {
+        damage += damage/2;
     }
     enemigo->setHP(enemigo->getHP() - damage);
 }

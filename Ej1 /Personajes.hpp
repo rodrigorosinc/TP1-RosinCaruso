@@ -16,4 +16,5 @@ class Personaje {
         virtual std::vector<std::shared_ptr<Arma>> getArmas() const = 0;
         virtual std::string getNombre() const = 0;
         virtual void setLegendario(bool legendario) = 0;
+        virtual void removerArma(int index) = 0;
 };

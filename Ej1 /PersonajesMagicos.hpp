@@ -4,13 +4,6 @@
 #include "ItemsCombate.hpp"
 #include "Armas.hpp"
 
-/*Al mismo tiempo, se desea implementar dos grupos de personajes 
-i. Magos: hechicero, conjurador, brujo y nigromante. 
-ii. Guerreros: bárbaro, paladín, caballero, mercenario y gladiador. 
-Al igual que en el punto anterior, estos personajes derivan de una interfaz 
-única, de la cual se desprenden dos clases abstractas. Sea creativo, las clases 
-derivadas deberán tener al menos 5 atributos y 5 métodos.*/
-
 class Magos : public Personaje {
     protected:
         std::string nombre;

@@ -38,6 +38,7 @@ class ItemMagico : public Arma {
         int damDefensaYGolpe(bool special) const override;
         void setDamage(int damage) override;
         void setMaldito(bool maldecido) override;
+        std::string getNombreItem() const override;
 
         int getDamage() const override;
         bool isMaldecido() const override;

@@ -16,6 +16,9 @@ ArmaCombate::ArmaCombate(string arma, int damage, int sharpness, int letalidad, 
 int ArmaCombate::calcularDamTotal() const {
     return calcularDamage() + calcularAddedDamage();
 }
+string ArmaCombate::getNombreItem() const {
+    return arma;
+}
 int ArmaCombate::damAtaqueRapido(bool special) const {
     return 10 + calcularDamTotal();
 }

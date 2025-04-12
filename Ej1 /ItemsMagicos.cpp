@@ -63,6 +63,10 @@ string ItemMagico::getTipo() const {
     return tipo;
 }
 
+string ItemMagico::getNombreItem() const {
+    return arma;
+}
+
 bool ItemMagico::isMaldecido() const {
     return maldito;
 }
