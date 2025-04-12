@@ -9,14 +9,12 @@
 
 class ItemMagico : public Arma {
     protected:
-        std::string nombreCreador;
-        std::string arma;
-        std::string tipo;
-
         int damage;
         int poderMagico;
         int critico;
-
+        std::string nombreCreador;
+        std::string arma;
+        std::string tipo;
         bool maldito;
         bool consumible;
         bool mistico;
@@ -24,7 +22,7 @@ class ItemMagico : public Arma {
     public:
         ItemMagico(int damage, int poderMagico, int critico, bool consumible, std::string nombreCreador, 
             std::string arma, std::string tipo);
-        virtual ~ItemMagico() = default;
+        virtual ~ItemMagico();
         
         virtual void consumir(std::shared_ptr<Personaje> personaje) = 0;
         virtual int hacerDamCritico() const = 0;
@@ -33,21 +31,21 @@ class ItemMagico : public Arma {
         virtual bool puedePurificar(std::shared_ptr<Personaje> personaje) const = 0;
         
         int calcularDamTotal() const;
-        int damAtaqueRapido(bool special) const override;
-        int damAtaqueFuerte(bool special) const override;
-        int damDefensaYGolpe(bool special) const override;
+        int damAtaqueRapido() const override;
+        int damAtaqueFuerte() const override;
+        int damDefensaYGolpe() const override;
         void setDamage(int damage) override;
         void setMaldito(bool maldecido) override;
         std::string getNombreItem() const override;
 
         int getDamage() const override;
-        bool isMaldecido() const override;
+        
+        bool isMaldito() const;
         
         std::string getCreador() const;
         std::string getArma() const;
         std::string getTipo() const;
         
-        void setDamage(int damage);
         void setMistico(bool mistico);
 
         void setCreador(std::string creador);

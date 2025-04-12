@@ -10,9 +10,9 @@ class Arma{
         virtual ~Arma() = default;
         virtual int getDamage() const = 0;
         virtual std::string getNombreItem() const = 0;
-        virtual int damAtaqueRapido(bool special) const = 0;
-        virtual int damAtaqueFuerte(bool special) const = 0;
-        virtual int damDefensaYGolpe(bool special) const = 0;
+        virtual int damAtaqueRapido() const = 0;
+        virtual int damAtaqueFuerte() const = 0;
+        virtual int damDefensaYGolpe() const = 0;
         virtual bool isMaldecido() const = 0;
         virtual std::string creadoPor() const = 0;
         virtual std::string getTipo() const = 0;

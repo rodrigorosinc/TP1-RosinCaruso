@@ -35,24 +35,23 @@ string asignarNombreCreador(ItemMagico& item) {
     return nombreCreador;
 }
 
-bool asignarMaldecido(ItemMagico& item) {
-    // Asigno maldición al azar
-    srand(time(0)); // Inicializar la semilla del generador de números aleatorios
-    int random = rand() % 5;  
-    if (random == 0) {
-        item.maldicir();
-        return true;
-    }
-    return false; 
-}  
 
 ItemMagico::~ItemMagico() = default;
 
 ItemMagico::ItemMagico(int damage, int critico, int poderMagico,
-    bool consumible, string nombreCreador, string arma, string tipo)
-    : damage(damage), critico(critico), poderMagico(poderMagico), tipo(tipo),
-    consumible(consumible), mistico(false), maldito(asignarMaldecido(*this)),
-    nombreCreador(asignarNombreCreador(*this)) {}
+    bool consumible, std::string nombreCreador, std::string arma, std::string tipo)
+    : damage(damage), poderMagico(poderMagico), critico(critico), 
+      nombreCreador(nombreCreador), consumible(consumible), 
+      arma(arma), tipo(tipo), 
+      mistico(false) {
+        srand(time(0)); // Inicializar la semilla del generador de números aleatorios
+        int random = rand() % 4;
+        if (random == 0) {
+            this->maldito = true;
+        } else {
+            this->maldito = false;
+        }
+      }
 
 
 int ItemMagico::getDamage() const {
@@ -66,8 +65,7 @@ string ItemMagico::getTipo() const {
 string ItemMagico::getNombreItem() const {
     return arma;
 }
-
-bool ItemMagico::isMaldecido() const {
+bool ItemMagico::isMaldito() const {
     return maldito;
 }
 void ItemMagico::maldicir() {
@@ -85,18 +83,14 @@ bool ItemMagico::isMistico() const {
 bool ItemMagico::isConsumible() const {
     return consumible;
 }
-bool ItemMagico::isMaldecido() const {
-    return maldito;
-}
+
 void ItemMagico::setCreador(string creador) {
     this->nombreCreador = creador;
 }
 void ItemMagico::setDamage(int dam) {
     this->damage = dam;
 }
-void ItemMagico::setDamage(int damage) {
-    this->damage = damage;
-}
+
 void ItemMagico::setMaldito(bool maldecido) {
     this->maldito = maldecido;
 }
@@ -107,13 +101,13 @@ int ItemMagico::calcularDamTotal() const {
     return hacerDamCritico() + ataqueMistico();
 }
 
-int ItemMagico::damAtaqueRapido(bool special) const {
+int ItemMagico::damAtaqueRapido() const {
     return 10 + calcularDamTotal();
 }
-int ItemMagico::damAtaqueFuerte(bool special) const {
+int ItemMagico::damAtaqueFuerte() const {
     return 10 + calcularDamTotal();
 }
-int ItemMagico::damDefensaYGolpe(bool special) const {
+int ItemMagico::damDefensaYGolpe() const {
     return 10 + calcularDamTotal();
 }
 
@@ -161,7 +155,12 @@ Baston::Baston()
       }
 
 void Baston::consumir(shared_ptr<Personaje> personaje) {
-    cout << "El baston no se puede consumir." << endl;
+    personaje->setHP(personaje->getHP() + 1);
+    cout << "Se ha consumido el baston." << endl;
+    if (maldito) {
+        cout << "El baston es maldito. Se te resta 10 de vida." << endl;
+        personaje->setHP(personaje->getHP() - 10);
+    }
 }
 void Baston::purificar(shared_ptr<Personaje> personaje) {
     if (personaje->getNombre() == "Brujo") {
@@ -269,6 +268,7 @@ void LibroDeHechizos::consumir(shared_ptr<Personaje> personaje) {
         damage += additionalDamage;
         critico += additionalCritico;
         poderMagico += additionalPoderMagico;
+        personaje->setHP(personaje->getHP() + 10);
         cout << "El libro de hechizos ha sido consumido." << endl;
     } else {
         cout << "El libro de hechizos no se puede consumir debido a la maldicion." << endl;
@@ -393,6 +393,7 @@ void Pocion::consumir(shared_ptr<Personaje> personaje) {
 void Pocion::purificar(shared_ptr<Personaje> personaje) {
     maldito = false;
     poderMagico -= 3;
+    personaje->setHP(personaje->getHP() + 5);
 }
 
 int Pocion::hacerDamCritico() const {

@@ -5,21 +5,20 @@
 
 class ArmaCombate : public Arma {
     protected:
-        std::string nombreCreador;
-        std::string arma;
-        std::string tipo;
+        int letalidad;
         int damage;
         int sharpness;
-        int letalidad;
+        std::string arma;
+        std::string tipo;
         bool legendaria;
     public:
-        ArmaCombate(std::string arma, int damage, int sharpness, int letalidad, string tipo);
+        ArmaCombate(std::string arma, int damage, int sharpness, int letalidad, std::string tipo);
         virtual ~ArmaCombate() = default;
         
         int calcularDamTotal() const;
-        int damAtaqueRapido(bool special) const override;
-        int damAtaqueFuerte(bool special) const override;
-        int damDefensaYGolpe(bool special) const override;
+        int damAtaqueRapido() const override;
+        int damAtaqueFuerte() const override;
+        int damDefensaYGolpe() const override;
         int getDamage() const override;
         std::string getNombreItem() const override;
         void setDamage(int damage) override;
@@ -33,10 +32,10 @@ class ArmaCombate : public Arma {
 
 class HachaSimple : public ArmaCombate {
     private:
-        std::string material;
         int addedDamage;
         int longitudHoja;
         int peso;
+        std::string material;
         bool quebrada;
     public:
         HachaSimple();
@@ -51,9 +50,9 @@ class HachaSimple : public ArmaCombate {
 
 class HachaDoble : public ArmaCombate {
     private:
-        std::string material;
         int addSharpness;
         int anchoMango;
+        std::string material;
         bool tieneLanza;
         bool quebrada;
     public:
@@ -64,17 +63,17 @@ class HachaDoble : public ArmaCombate {
         int calcularAddedDamage() const override;
         void afilar();
         void pulir();
-        void lanzar(shared_ptr<Personaje> enemigo);
+        void lanzar(std::shared_ptr<Personaje> enemigo);
 };
 
 class Espada : public ArmaCombate {
     private:
-        std::string material;
         int longitudHoja;
         int peso;
-        bool doblada;
         int addLetalidad;
         int aura;
+        std::string material;
+        bool doblada;
 
     public:
         Espada();
@@ -84,7 +83,7 @@ class Espada : public ArmaCombate {
         int calcularAddedDamage() const override;
         void relucir();
         void desdoblar();
-        void canjearAura(shared_ptr<Personaje> enemigo);
+        void canjearAura(std::shared_ptr<Personaje> enemigo);
 };
 
 class Lanza : public ArmaCombate {
@@ -101,7 +100,7 @@ class Lanza : public ArmaCombate {
 
         int calcularDamage() const override;
         int calcularAddedDamage() const override;
-        void lanzar(shared_ptr<Personaje> enemigo);
+        void lanzar(std::shared_ptr<Personaje> enemigo);
         void envenenar();
         void deshacerEnvenenamiento();
 };

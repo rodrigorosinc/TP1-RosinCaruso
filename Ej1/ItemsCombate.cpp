@@ -10,8 +10,8 @@ abstractas. Sea creativo, las clases derivadas deberán tener al menos 5
 atributos y 5 métodos.
 */
 
-ArmaCombate::ArmaCombate(string arma, int damage, int sharpness, int letalidad, string tipo)
-    : arma(arma), damage(damage), sharpness(sharpness), letalidad(letalidad), tipo(tipo) {}
+ArmaCombate::ArmaCombate(std::string arma, int damage, int sharpness, int letalidad, std::string tipo)
+    : arma(arma), damage(damage), sharpness(sharpness), letalidad(letalidad), tipo(tipo), legendaria(false) {}
 
 int ArmaCombate::calcularDamTotal() const {
     return calcularDamage() + calcularAddedDamage();
@@ -19,13 +19,13 @@ int ArmaCombate::calcularDamTotal() const {
 string ArmaCombate::getNombreItem() const {
     return arma;
 }
-int ArmaCombate::damAtaqueRapido(bool special) const {
+int ArmaCombate::damAtaqueRapido() const {
     return 10 + calcularDamTotal();
 }
-int ArmaCombate::damAtaqueFuerte(bool special) const {
+int ArmaCombate::damAtaqueFuerte() const {
     return 10 + calcularDamTotal();
 }
-int ArmaCombate::damDefensaYGolpe(bool special) const {
+int ArmaCombate::damDefensaYGolpe() const {
     return 10 + calcularDamTotal();
 }
 int ArmaCombate::getDamage() const {
@@ -34,9 +34,7 @@ int ArmaCombate::getDamage() const {
 bool ArmaCombate::isMaldecido() const {
     return false;
 }
-string ArmaCombate::creadoPor() const {
-    return nombreCreador;
-}
+
 void ArmaCombate::setDamage(int dam) {
     damage = dam;
 }
@@ -319,7 +317,7 @@ Lanza::Lanza() : ArmaCombate("Lanza", 7, 3, 3, "Arma Combate") {
     } else {
         envenenada = false;
     }
-    int random = rand() % 6;
+    random = rand() % 6;
     if (random == 5){
         headshot = true;
     } else {
