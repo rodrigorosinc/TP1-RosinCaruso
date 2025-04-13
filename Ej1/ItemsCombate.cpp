@@ -75,11 +75,12 @@ HachaSimple::HachaSimple()
                 peso = 5;
                 legendaria = true;
                 addedDamage = 10;
-                quebrada = false;
                 return;
         }
         addedDamage = rand() % 4 + 1;
-        quebrada = false;           
+        quebrada = false;
+        legendaria = rand() % 3 == 0;
+        maldita = rand() % 3 == 0;             
     }
 
 HachaSimple::~HachaSimple() = default;
@@ -171,6 +172,8 @@ HachaDoble::HachaDoble() : ArmaCombate("Hacha Doble", 11, 2, 5, "Arma Combate") 
     } else {
         quebrada = false;
     }
+    legendaria = rand() % 3 == 0;
+    maldita = rand() % 3 == 0;
 }
 HachaDoble::~HachaDoble() = default;
 int HachaDoble::calcularDamage() const {
@@ -270,6 +273,8 @@ Espada::Espada() : ArmaCombate("Espada", 12, 5, 2, "Arma Combate") {
     } else {
         doblada = false;
     }
+    legendaria = rand() % 3 == 0;
+    maldita = rand() % 3 == 0;
 }
 
 Espada::~Espada() = default;
@@ -382,6 +387,8 @@ Garrote::Garrote() : ArmaCombate("Garrote", 8, 4, 4, "Arma Combate") {
     peso = 7;
     addletalidad = 2;
     largoPinchos = 3;
+    legendaria = rand() % 3 == 0;
+    maldita = rand() % 3 == 0;
 }
 Garrote::~Garrote() = default;
 

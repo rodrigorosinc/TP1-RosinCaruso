@@ -33,6 +33,8 @@ class Magos : public Personaje {
         void setMana(int newMana);
         void setTurno(bool turno);
         void setArmaActual(std::shared_ptr<Arma> arma);
+        void setLegendario(bool legendario) override;
+        void removerArma(int index) override;
 
         bool isLegendario() const;
 
@@ -47,7 +49,7 @@ class Hechicero : public Magos {
         bool tienePocionFuria;
         bool tienePocionX2;
     public:
-        Hechicero(std::string nombre, int hp, std::vector<std::shared_ptr<Arma>> armas, std::shared_ptr<Arma> armaActual);
+        Hechicero(std::string myNombre, int myHp, std::vector<std::shared_ptr<Arma>> myArmas, std::shared_ptr<Arma> myArmaActual);
         ~Hechicero() override;
 
         void pocionEscudo();

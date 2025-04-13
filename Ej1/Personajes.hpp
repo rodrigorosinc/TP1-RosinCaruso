@@ -14,6 +14,7 @@ class Personaje {
         virtual void defensaYGolpe(std::shared_ptr<Personaje> enemigo) = 0;
         virtual void setHP(int newHp) = 0;
         virtual int getHP() const = 0;
+        virtual std::string getTipo() const = 0;
         virtual std::vector<std::shared_ptr<Arma>> getArmas() const = 0;
         virtual std::string getNombre() const = 0;
         virtual void setLegendario(bool legendario) = 0;

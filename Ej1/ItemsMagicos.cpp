@@ -198,7 +198,7 @@ Baston::~Baston() = default;
 // ====================== LIBRO DE HECHIZOS ==========================
 
 LibroDeHechizos::LibroDeHechizos() :
-    ItemMagico(7, 10, 100, true, "Libro de Hechizos") , legendarizado(false){
+    ItemMagico(5, 20, 0, true, "Libro de Hechizos") { 
         srand(time(0)); // Inicializar la semilla del generador de números aleatorios
         int random = rand() % 6;
         if (random == 0) {
