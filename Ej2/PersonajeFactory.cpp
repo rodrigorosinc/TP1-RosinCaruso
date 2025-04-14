@@ -57,7 +57,12 @@ std::string chooseNombreMagos() {
 }
 
 void PersonajeFactory::inicializarSemilla(){
-    srand(time(nullptr));
+    static bool semillaInicializada = false;
+    if (semillaInicializada) {
+        return; // La semilla ya fue inicializada, no hacemos nada
+    }
+    semillaInicializada = true; // Marcamos que la semilla ha sido inicializada
+    srand(time(0));
 }
 
 int PersonajeFactory::generarNumerosRandom(int limInf, int limSup){
@@ -80,8 +85,6 @@ shared_ptr<Magos> PersonajeFactory::crearMago(){
             armas.push_back(crearItemMagico());
         }
     }
-
-    
     shared_ptr<Arma> armaActual;
     if (!armas.empty()) {
         armaActual = armas[0]; // Asignar la primera arma como arma actual

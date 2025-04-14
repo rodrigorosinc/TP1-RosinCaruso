@@ -5,15 +5,39 @@
 using namespace std;
 
 Magos::Magos(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
-    : tipo("Mago"), nombre(myNombre), hp(myHp), armaActual(myArmaActual) {
-        vector<shared_ptr<Arma>> armas;
-        for (auto& arma : myArmas) {
-            armas.push_back(arma);
-        }
-    }
+    : tipo("Mago"), nombre(myNombre), hp(myHp), armas(myArmas), armaActual(myArmaActual) {}
 Magos::~Magos() = default;
 
+void damagePorTurnoMago(Personaje& personaje, shared_ptr<Personaje> enemigo, int damage) {
+    if (!enemigo) {
+        cerr << "Error: Enemigo no válido." << endl;
+        return;
+    }
+
+    if (personaje.getTurno()) {
+        cout << personaje.getNombre() << " ataca a " << enemigo->getNombre() << " con " 
+             << personaje.getArmaActual()->getNombreItem() << endl;
+        cout << "Daño infligido: " << damage << endl;
+    } else {
+        cout << enemigo->getNombre() << " te ha atacado!" << endl;
+    }
+
+    int nuevoHP = enemigo->getHP() - damage;
+    cout << "HP reducido a: " << nuevoHP << endl;
+    enemigo->setHP(nuevoHP);
+}
+
 void Magos::ataqueRapido(shared_ptr<Personaje> enemigo) {
+    if (!enemigo) {
+        cerr << "Error: Enemigo no válido." << endl;
+        return;
+    }
+    if (!armaActual) {
+        cout << "No tienes arma equipada" << endl;
+        cout << "Haces 10 de daño a " << enemigo->getNombre() << endl;
+        enemigo->setHP(enemigo->getHP() - 10);
+        return;
+    }
     int damage = armaActual->damAtaqueRapido();
     if (armaActual->getTipo() == "Item Magico") {
         damage += damage/3;
@@ -21,9 +45,20 @@ void Magos::ataqueRapido(shared_ptr<Personaje> enemigo) {
     if (this->isLegendario()) {
         damage += damage/2;
     }
-    enemigo->setHP(enemigo->getHP() - damage);
+    damagePorTurnoMago(*this, enemigo, damage);
+    cout << "---------------------------------------------" << endl;
 }
 void Magos::ataqueFuerte(shared_ptr<Personaje> enemigo) {
+    if (!enemigo) {
+        cerr << "Error: Enemigo no válido." << endl;
+        return;
+    }
+    if (!armaActual) {
+        cout << "No tienes arma equipada" << endl;
+        cout << "Haces 10 de daño a " << enemigo->getNombre() << endl;
+        enemigo->setHP(enemigo->getHP() - 10);
+        return;
+    }
     int damage = armaActual->damAtaqueFuerte();
     if (armaActual->getTipo() == "Item Magico") {
         damage += damage/3;
@@ -31,9 +66,21 @@ void Magos::ataqueFuerte(shared_ptr<Personaje> enemigo) {
     if (this->isLegendario()) {
         damage += damage/2;
     }
-    enemigo->setHP(enemigo->getHP() - damage);
+    damagePorTurnoMago(*this, enemigo, damage);
+    cout << "---------------------------------------------" << endl;
 }
+
 void Magos::defensaYGolpe(shared_ptr<Personaje> enemigo) {
+    if (!enemigo) {
+        cerr << "Error: Enemigo no válido." << endl;
+        return;
+    }
+    if (!armaActual) {
+        cout << "No tienes arma equipada" << endl;
+        cout << "Haces 10 de daño a " << enemigo->getNombre() << endl;
+        enemigo->setHP(enemigo->getHP() - 10);
+        return;
+    }
     int damage = armaActual->damDefensaYGolpe();
     if (armaActual->getTipo() == "Item Magico") {
         damage += damage/3;
@@ -41,7 +88,8 @@ void Magos::defensaYGolpe(shared_ptr<Personaje> enemigo) {
     if (this->isLegendario()) {
         damage += damage/2;
     }
-    enemigo->setHP(enemigo->getHP() - damage);
+    damagePorTurnoMago(*this, enemigo, damage);
+    cout << "---------------------------------------------" << endl;    
 }
 void Magos::setHP(int newHp) {
     hp = newHp;
@@ -83,13 +131,17 @@ void Magos::removerArma(int index) {
         cout << "Index out of range" << endl;
     }
 }
-
+shared_ptr<Arma> Magos::getArmaActual() const {
+    return armaActual;
+}
+bool Magos::getTurno() const {
+    return miTurno;
+}
 
 // ======================== Hechicero ========================
 
 Hechicero::Hechicero(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
     : Magos(myNombre, myHp, myArmas, myArmaActual) {
-        srand(time(0));
         int randomNum = rand();
         tienePocionEscudo = randomNum % 2 == 0;
         tienePocionRecuperacion = randomNum % 2 == 0;
@@ -165,7 +217,6 @@ void Hechicero::pocionX2() {
 
 Conjurador::Conjurador(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
     : Magos(myNombre, myHp, myArmas, myArmaActual) {
-        srand(time(0));
         int randomNum = rand();
         conjuroOscuro = randomNum % 2 == 0;
         conjuroLuminoso = randomNum % 2 == 0;
@@ -213,7 +264,6 @@ void Conjurador::maldecir(shared_ptr<Personaje> enemigo) {
         cout << "Conjurando maldicion" << endl;
         maldijo = true;
         armas = enemigo->getArmas();
-        srand(time(0));
         int randomNum = rand() % armas.size();
         shared_ptr<Arma> armaMaldecida = armas[randomNum];
         armaMaldecida->setMaldito(true);        
@@ -227,7 +277,6 @@ void Conjurador::purificar(shared_ptr<Personaje> enemigo) {
         cout << "Purificando arma" << endl;
         purificado = true;
         armas = enemigo->getArmas();
-        srand(time(0));
         int randomNum = rand() % armas.size();
         shared_ptr<Arma> arma = armas[randomNum];
         if (arma->isMaldito()) {
@@ -245,7 +294,6 @@ void Conjurador::purificar(shared_ptr<Personaje> enemigo) {
 
 Brujo::Brujo(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
     : Magos(myNombre, myHp, myArmas, myArmaActual) {
-        srand(time(0));
         int randomNum = rand();
         embrujado = randomNum % 3 == 0;
         abracadabra = randomNum % 5 == 0;
@@ -313,7 +361,6 @@ void Brujo::recuperse() {
 
 Nigromante::Nigromante(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
     : Magos(myNombre, myHp, myArmas, myArmaActual) {
-        srand(time(0));
         int randomNum = rand();
         invocoEspectro = randomNum % 2 == 0;
         invocoFantasma = randomNum % 3 == 0;

@@ -35,13 +35,15 @@ class Guerreros : public Personaje {
         int getHP() const override;
         std::vector<std::shared_ptr<Arma>> getArmas() const override;
         void removerArma(int index) override;
-
+        void setTurno(bool turno) override;
+        bool getTurno() const override;
+        std::shared_ptr<Arma> getArmaActual() const override;
+        
         std::string getNombre() const;
         std::string getTipo() const;
         int getFuerzaDelRey() const;
 
         void setFuerzaDelRey(int newFDR);
-        void setTurno(bool turno);
         void setArmaActual(std::shared_ptr<Arma> arma);
         void setLegendario(bool legendario);
 

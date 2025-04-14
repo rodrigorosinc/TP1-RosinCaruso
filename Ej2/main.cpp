@@ -6,7 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
-#include <cstdlib>
+
 
 using namespace std;
 
@@ -19,14 +19,26 @@ int main() {
     for (auto& p : personajes) {
         cout << p->getNombre() << " (" << p->getTipo() << ") - HP: " 
              << p->getHP() << " - Armas: " << p->getArmas().size() << endl;
+        cout << endl;
     }
     cout << "Total de personajes creados: " << personajes.size() << endl;
+    cout << endl;
+    cout << "------------------------------" << endl;
+    cout << endl;
 
-    cout << "Personajes creados: " << personajes.size() << endl;
-    for (const auto& p : personajes) {
-        cout << p->getNombre() << " (" << p->getTipo() << ") - HP: " 
-             << p->getHP() << " - Armas: " << p->getArmas().size() << endl;
+    // Imprimir armas de cada personaje
+    for (const auto& personaje : personajes) {
+        cout << "Armas de " << personaje->getNombre() << ":" << endl;
+        if (personaje->getArmas().size() == 0) {
+            cout << "No tiene armas." << endl;
+        }
+        for (const auto& arma : personaje->getArmas()) {
+            cout << "- " << arma->getNombreItem() << " (Tipo: " 
+                 << arma->getTipo() << ", Daño: " << arma->getDamage() 
+                 << ")" << endl;
+        }
+        cout << endl;
     }
-    
+
     return 0;
 }

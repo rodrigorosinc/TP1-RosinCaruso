@@ -25,6 +25,8 @@ class Magos : public Personaje {
         void setHP(int newHp) override;
         int getHP() const override;
         std::vector<std::shared_ptr<Arma>> getArmas() const override;
+        std::shared_ptr<Arma> getArmaActual() const override;
+        bool getTurno() const override;
 
         std::string getNombre() const;
         std::string getTipo() const;

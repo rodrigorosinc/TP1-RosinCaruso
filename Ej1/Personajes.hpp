@@ -19,4 +19,7 @@ class Personaje {
         virtual std::string getNombre() const = 0;
         virtual void setLegendario(bool legendario) = 0;
         virtual void removerArma(int index) = 0;
+        virtual void setTurno(bool turno) = 0;
+        virtual bool getTurno() const = 0;
+        virtual std::shared_ptr<Arma> getArmaActual() const = 0;
 };

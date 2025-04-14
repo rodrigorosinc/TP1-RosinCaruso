@@ -8,37 +8,94 @@ Guerreros::Guerreros(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas
     : nombre(myNombre), hp(myHp), armas(myArmas), armaActual(myArmaActual), tipo("Guerrero") {}
 Guerreros::~Guerreros() = default;
 
+void damagePorTurno(Personaje& personaje, shared_ptr<Personaje> enemigo, int damage) {
+    if (!enemigo) {
+        cerr << "Error: Enemigo no válido." << endl;
+        return;
+    }
+
+    if (personaje.getTurno()) {
+        cout << personaje.getNombre() << " ataca a " << enemigo->getNombre() << " con " 
+             << personaje.getArmaActual()->getNombreItem() << endl;
+        cout << "Daño infligido: " << damage << endl;
+    } else {
+        cout << enemigo->getNombre() << " te ha atacado!" << endl;
+    }
+
+    int nuevoHP = enemigo->getHP() - damage;
+    cout << "HP reducido a: " << nuevoHP << endl;
+    enemigo->setHP(nuevoHP);  // Solo se resta el daño una vez
+}
+
+
 void Guerreros::ataqueRapido(shared_ptr<Personaje> enemigo) {
+    if (!enemigo) {
+        cerr << "Error: Enemigo no válido." << endl;
+        return;
+    }
+
+    if (!armaActual) {
+        cout << "No tienes arma equipada" << endl;
+        cout << "Haces 10 de daño a " << enemigo->getNombre() << endl;
+        enemigo->setHP(enemigo->getHP() - 10);
+        return;
+    }
+
     int damage = armaActual->damAtaqueRapido();
     if (armaActual->getTipo() == "Arma Combate") {
-        damage += damage/3;
+        damage += damage / 3;
     }
     if (this->isLegendario()) {
-        damage += damage/2 + fuerzaDelRey/3;
+        damage += damage / 2 + fuerzaDelRey / 3;
     }
-    enemigo->setHP(enemigo->getHP() - damage);
+    damagePorTurno(*this, enemigo, damage);
+    cout << "---------------------------------------------" << endl;
 }
 
 void Guerreros::ataqueFuerte(shared_ptr<Personaje> enemigo) {
+    if (!enemigo) {
+        cerr << "Error: Enemigo no válido." << endl;
+        return;
+    }
+
+    if (!armaActual) {
+        cout << "No tienes arma equipada" << endl;
+        cout << "Haces 10 de daño a " << enemigo->getNombre() << endl;
+        enemigo->setHP(enemigo->getHP() - 10);
+        return;
+    }
+
     int damage = armaActual->damAtaqueFuerte();
     if (armaActual->getTipo() == "Arma Combate") {
-        damage += damage/3;
+        damage += damage / 3;
     }
     if (this->isLegendario()) {
-        damage += damage/2 + fuerzaDelRey/3;
+        damage += damage / 2 + fuerzaDelRey / 3;
     }
-    enemigo->setHP(enemigo->getHP() - damage);
+    damagePorTurno(*this, enemigo, damage);
+    cout << "---------------------------------------------" << endl;
 }
 
 void Guerreros::defensaYGolpe(shared_ptr<Personaje> enemigo) {
+    if (!enemigo) {
+        cerr << "Error: Enemigo no válido." << endl;
+        return;
+    }
+    if (!armaActual) {
+        cout << "No tienes arma equipada" << endl;
+        cout << "Haces 10 de daño a " << enemigo->getNombre() << endl;
+        enemigo->setHP(enemigo->getHP() - 10);
+        return;
+    }
     int damage = armaActual->damDefensaYGolpe();
     if (armaActual->getTipo() == "Arma Combate") {
-        damage += damage/3;
+        damage += damage / 3;
     }
     if (this->isLegendario()) {
-        damage += damage/2 + fuerzaDelRey/3;
+        damage += damage / 2 + fuerzaDelRey / 3;
     }
-    enemigo->setHP(enemigo->getHP() - damage);
+    damagePorTurno(*this, enemigo, damage);
+    cout << "---------------------------------------------" << endl;
 }
 void Guerreros::setHP(int newHp) {
     hp = newHp;
@@ -80,12 +137,19 @@ void Guerreros::removerArma(int index) {
         cout << "Index out of range" << endl;
     }
 }
+bool Guerreros::getTurno() const {
+    return miTurno;
+}
+shared_ptr<Arma> Guerreros::getArmaActual() const {
+    return armaActual;
+}
+
+
 
 // ======================= Barbaro ========================
 
 Barbaro::Barbaro(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
     : Guerreros(nombre, hp, armas, armaActual) {
-        srand(time(0));
         int randomNum = rand(); 
         peso = randomNum % 100 + 1;
         fuerza = randomNum % 100;
@@ -148,7 +212,6 @@ void Barbaro::poderBerserker(shared_ptr<Personaje> enemigo) {
 
 Paladin::Paladin(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
     : Guerreros(nombre, hp, armas, armaActual) {
-        srand(time(0));
         int randomNum = rand();
         espadaDeLaVerdad = true;
         yelmoDeLaEsperanza = randomNum % 2 == 0;
@@ -219,7 +282,6 @@ enum Unidad {
 
 Caballero::Caballero(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
     : Guerreros(nombre, hp, armas, armaActual) {
-        srand(time(0));
         int randomNum = rand();
         switch (randomNum % 4) {
         case UNIDAD_DE_FUEGO:
@@ -307,7 +369,6 @@ void Caballero::cambiarUnidad(string nuevaUnidad) {
 
 Mercenario::Mercenario(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
     : Guerreros(nombre, hp, armas, armaActual) {
-        srand(time(0));
         int randomNum = rand();
         fuerzaDelRey = 15;
         inteligencia = randomNum % 100 + 1;
@@ -385,7 +446,6 @@ void Mercenario::montarJinete() {
 
 Gladiador::Gladiador(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
     : Guerreros(nombre, hp, armas, armaActual) {
-        srand(time(0));
         int randomNum = rand();
         fuerzaDelRey = 20;
         espartano = randomNum % 2 == 0;

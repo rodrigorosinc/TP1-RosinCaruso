@@ -48,7 +48,6 @@ bool ArmaCombate::isMaldito() const {
 
 HachaSimple::HachaSimple()
     : ArmaCombate("Hacha Simple", 10, 5, 2, "Arma Combate") {
-        srand(time(0));
         int randomMaterial = rand() % 4;
         switch (randomMaterial) {
             case 0:
@@ -111,7 +110,6 @@ void HachaSimple::afilar() {
     longitudHoja--;
 }
 void HachaSimple::rehacer() {
-    srand(time(0));
     int randomMaterial = rand() % 3;
     switch (randomMaterial) {
         case 0:
@@ -138,7 +136,6 @@ void HachaSimple::rehacer() {
 // ==================== HachaDoble ====================
 
 HachaDoble::HachaDoble() : ArmaCombate("Hacha Doble", 11, 2, 5, "Arma Combate") {
-    srand(time(0));
     int randomMaterial = rand() % 4;
     switch (randomMaterial) {
         case 0:
@@ -231,7 +228,6 @@ enum MaterialEspada {
 };
 
 Espada::Espada() : ArmaCombate("Espada", 12, 5, 2, "Arma Combate") {
-    srand(time(0));
     int randomMaterial = rand() % 4;
     switch (randomMaterial) {
         case HIERRO:
@@ -323,7 +319,6 @@ void Espada::canjearAura(shared_ptr<Personaje> enemigo) {
 // ==================== Lanza ====================
 
 Lanza::Lanza() : ArmaCombate("Lanza", 7, 3, 3, "Arma Combate") {
-    srand(time(0));
     int random = rand() % 3;
     if (random == 0){
         envenenada = true;
@@ -376,7 +371,6 @@ void Lanza::deshacerEnvenenamiento() {
 // ==================== Garrote ====================
 
 Garrote::Garrote() : ArmaCombate("Garrote", 8, 4, 4, "Arma Combate") {
-    srand(time(0));
     int random = rand() % 3;
     if (random == 0){
         envenenada = true;

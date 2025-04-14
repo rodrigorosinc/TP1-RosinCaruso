@@ -16,7 +16,6 @@ ItemMagico::ItemMagico(int damage, int critico, int poderMagico,
     : damage(damage), poderMagico(poderMagico), critico(critico), 
     consumible(consumible), arma(arma), tipo("Item Magico"), 
     mistico(false) {
-        srand(time(0)); // Inicializar la semilla del generador de números aleatorios
         int random = rand() % 4;
         if (random == 0) {
             this->maldito = true;
@@ -104,7 +103,6 @@ enum Elemento {
 
 string asignarElemento(Baston& baston) {
     // Asigno elemento al azar
-    srand(time(0)); // Inicializar la semilla del generador de números aleatorios
     int random = rand() % 3;  
     string element;
     switch (random) {
@@ -154,7 +152,6 @@ void Baston::purificar(shared_ptr<Personaje> personaje) {
     }
 }
 int Baston::hacerDamCritico() const {
-    srand(time(0)); // Inicializar la semilla del generador de números aleatorios
     int random = rand() % 100;
     int critChance = critico + poderMagico/5;
     if (random < critChance) {
@@ -199,7 +196,6 @@ Baston::~Baston() = default;
 
 LibroDeHechizos::LibroDeHechizos() :
     ItemMagico(5, 20, 0, true, "Libro de Hechizos") { 
-        srand(time(0)); // Inicializar la semilla del generador de números aleatorios
         int random = rand() % 6;
         if (random == 0) {
             this->mistico = true;
@@ -267,7 +263,6 @@ void LibroDeHechizos::purificar(shared_ptr<Personaje> personaje) {
     }
 }
 int LibroDeHechizos::hacerDamCritico() const {
-    srand(time(0)); // Inicializar la semilla del generador de números aleatorios
     int random = rand() % 100;
     int critChance = critico + poderMagico/4;
     if (random < critChance) {
@@ -310,7 +305,6 @@ enum creadorPocion {
 
 string asignarCreadorPocion(Pocion& pocion) {
     // Asigno creador al azar
-    srand(time(0)); // Inicializar la semilla del generador de números aleatorios
     int random = rand() % 4;  
     switch (random) {
         case 0:
@@ -331,7 +325,6 @@ string asignarCreadorPocion(Pocion& pocion) {
 
 Pocion::Pocion():
 ItemMagico(5, 35, 35, true, "Pocion"), isGood(false), seCayo(false) {
-        srand(time(0)); // Inicializar la semilla del generador de números aleatorios
         probSeCaiga =  rand() % 15;
         int random = rand() % 3;
         if (random == 0) {
@@ -345,7 +338,6 @@ ItemMagico(5, 35, 35, true, "Pocion"), isGood(false), seCayo(false) {
         }
 }
 bool Pocion::verificarCaida(shared_ptr<Personaje> personaje) const {
-    srand(time(0)); // Inicializar la semilla del generador de números aleatorios
     int random = rand() % 100;
     if (random < probSeCaiga) {
         cout << "Se cayó la poción, máquina." << endl;
@@ -380,7 +372,6 @@ void Pocion::purificar(shared_ptr<Personaje> personaje) {
 }
 
 int Pocion::hacerDamCritico() const {
-    srand(time(0)); // Inicializar la semilla del generador de números aleatorios
     int random = rand() % 100;
     int critChance = critico + poderMagico;
     if (random < critChance) {
@@ -431,7 +422,6 @@ void Amuleto::purificar(shared_ptr<Personaje> personaje) {
 }
 
 int Amuleto::hacerDamCritico() const {
-    srand(time(0)); // Inicializar la semilla del generador de números aleatorios
     int random = rand() % 100;
     int critChance = critico + poderMagico/3;
     if (random < critChance) {
