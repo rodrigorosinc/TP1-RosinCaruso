@@ -8,34 +8,9 @@ Magos::Magos(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared
     : tipo("Mago"), nombre(myNombre), hp(myHp), armas(myArmas), armaActual(myArmaActual) {}
 Magos::~Magos() = default;
 
-void damagePorTurnoMago(Personaje& personaje, shared_ptr<Personaje> enemigo, int damage) {
-    if (!enemigo) {
-        cerr << "Error: Enemigo no válido." << endl;
-        return;
-    }
-
-    if (personaje.getTurno()) {
-        cout << personaje.getNombre() << " ataca a " << enemigo->getNombre() << " con " 
-             << personaje.getArmaActual()->getNombreItem() << endl;
-        cout << "Daño infligido: " << damage << endl;
-    } else {
-        cout << enemigo->getNombre() << " te ha atacado!" << endl;
-    }
-
-    int nuevoHP = enemigo->getHP() - damage;
-    cout << "HP reducido a: " << nuevoHP << endl;
-    enemigo->setHP(nuevoHP);
-}
-
 void Magos::ataqueRapido(shared_ptr<Personaje> enemigo) {
     if (!enemigo) {
         cerr << "Error: Enemigo no válido." << endl;
-        return;
-    }
-    if (!armaActual) {
-        cout << "No tienes arma equipada" << endl;
-        cout << "Haces 10 de daño a " << enemigo->getNombre() << endl;
-        enemigo->setHP(enemigo->getHP() - 10);
         return;
     }
     int damage = armaActual->damAtaqueRapido();
@@ -45,18 +20,12 @@ void Magos::ataqueRapido(shared_ptr<Personaje> enemigo) {
     if (this->isLegendario()) {
         damage += damage/2;
     }
-    damagePorTurnoMago(*this, enemigo, damage);
-    cout << "---------------------------------------------" << endl;
+    cout << damage;
+    enemigo->setHP(enemigo->getHP() - damage);
 }
 void Magos::ataqueFuerte(shared_ptr<Personaje> enemigo) {
     if (!enemigo) {
         cerr << "Error: Enemigo no válido." << endl;
-        return;
-    }
-    if (!armaActual) {
-        cout << "No tienes arma equipada" << endl;
-        cout << "Haces 10 de daño a " << enemigo->getNombre() << endl;
-        enemigo->setHP(enemigo->getHP() - 10);
         return;
     }
     int damage = armaActual->damAtaqueFuerte();
@@ -66,19 +35,12 @@ void Magos::ataqueFuerte(shared_ptr<Personaje> enemigo) {
     if (this->isLegendario()) {
         damage += damage/2;
     }
-    damagePorTurnoMago(*this, enemigo, damage);
-    cout << "---------------------------------------------" << endl;
+    cout << damage;
+    enemigo->setHP(enemigo->getHP() - damage);
 }
-
 void Magos::defensaYGolpe(shared_ptr<Personaje> enemigo) {
     if (!enemigo) {
         cerr << "Error: Enemigo no válido." << endl;
-        return;
-    }
-    if (!armaActual) {
-        cout << "No tienes arma equipada" << endl;
-        cout << "Haces 10 de daño a " << enemigo->getNombre() << endl;
-        enemigo->setHP(enemigo->getHP() - 10);
         return;
     }
     int damage = armaActual->damDefensaYGolpe();
@@ -88,8 +50,8 @@ void Magos::defensaYGolpe(shared_ptr<Personaje> enemigo) {
     if (this->isLegendario()) {
         damage += damage/2;
     }
-    damagePorTurnoMago(*this, enemigo, damage);
-    cout << "---------------------------------------------" << endl;    
+    cout << damage;
+    enemigo->setHP(enemigo->getHP() - damage);
 }
 void Magos::setHP(int newHp) {
     hp = newHp;
@@ -112,9 +74,7 @@ void Magos::setArmaActual(shared_ptr<Arma> arma) {
 void Magos::setMana(int newMana) {
     mana = newMana;
 }
-void Magos::setTurno(bool turno) {
-    miTurno = turno;
-}
+
 string Magos::getNombre() const {
     return nombre;
 }
@@ -134,11 +94,10 @@ void Magos::removerArma(int index) {
 shared_ptr<Arma> Magos::getArmaActual() const {
     return armaActual;
 }
-bool Magos::getTurno() const {
-    return miTurno;
-}
 
+// ===========================================================
 // ======================== Hechicero ========================
+// ===========================================================
 
 Hechicero::Hechicero(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
     : Magos(myNombre, myHp, myArmas, myArmaActual) {
@@ -151,7 +110,6 @@ Hechicero::Hechicero(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas
         mana = 100;
         int randomNum2 = rand();
         legendario = randomNum2 % 10 == 0;
-        miTurno = false;
 }
 Hechicero::~Hechicero() = default;
 
@@ -159,6 +117,9 @@ void Hechicero::pocionEscudo() {
     if (tienePocionEscudo) {
         cout << "Usando pocion de escudo" << endl;
         tienePocionEscudo = false;
+        if (mana <= 0) {
+            mana = 1;
+        }
         setHP(getHP() + 30 + getHP()*3/mana);
         cout << "HP aumentado a: " << getHP() << endl;
         cout << "Pocion de escudo usada" << endl;
@@ -170,6 +131,9 @@ void Hechicero::pocionRecuperacion() {
     if (tienePocionRecuperacion) {
         cout << "Usando pocion de recuperacion" << endl;
         tienePocionRecuperacion = false;
+        if (mana <= 0) {
+            mana = 1;
+        }
         setHP(getHP() + 32 + getHP()*3/mana);
         cout << "HP aumentado a: " << getHP() << endl;
         cout << "Pocion de recuperacion usada" << endl;
@@ -212,8 +176,9 @@ void Hechicero::pocionX2() {
         cout << "No tienes pocion de x2" << endl;
     }
 }
-
+// ============================================================
 // ======================== Conjurador ========================
+// ============================================================
 
 Conjurador::Conjurador(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
     : Magos(myNombre, myHp, myArmas, myArmaActual) {
@@ -226,7 +191,6 @@ Conjurador::Conjurador(string myNombre, int myHp, vector<shared_ptr<Arma>> myArm
         mana = 90;
         int randomNum2 = rand();
         legendario = randomNum2 % 10 == 0;
-        miTurno = false;
 }
 Conjurador::~Conjurador() = default;
 void Conjurador::conjurarOscuro(shared_ptr<Personaje> enemigo) {
@@ -289,8 +253,9 @@ void Conjurador::purificar(shared_ptr<Personaje> enemigo) {
         cout << "Ya has purificado un arma" << endl;
     }
 }
-
+// ======================================================
 // ======================= Brujo ========================
+// ======================================================
 
 Brujo::Brujo(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
     : Magos(myNombre, myHp, myArmas, myArmaActual) {
@@ -303,7 +268,6 @@ Brujo::Brujo(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared
         mana = 110;
         int randomNum2 = rand();
         legendario = randomNum2 % 10 == 0;
-        miTurno = false;
 }
 Brujo::~Brujo() = default;
 void Brujo::embrujar(shared_ptr<Personaje> enemigo) {
@@ -356,8 +320,9 @@ void Brujo::recuperse() {
         cout << "No tienes yin yang" << endl;
     }
 }
-
+// ===================================================
 // ==================== Nigromante ===================
+// ===================================================
 
 Nigromante::Nigromante(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
     : Magos(myNombre, myHp, myArmas, myArmaActual) {
@@ -370,7 +335,6 @@ Nigromante::Nigromante(string myNombre, int myHp, vector<shared_ptr<Arma>> myArm
         mana = 95;
         int randomNum2 = rand();
         legendario = randomNum2 % 10 == 0;
-        miTurno = false;
 }
 Nigromante::~Nigromante() = default;
 void Nigromante::invocarEspectro(shared_ptr<Personaje> enemigo) {

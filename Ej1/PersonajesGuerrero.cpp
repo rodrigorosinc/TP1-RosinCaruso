@@ -8,39 +8,11 @@ Guerreros::Guerreros(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas
     : nombre(myNombre), hp(myHp), armas(myArmas), armaActual(myArmaActual), tipo("Guerrero") {}
 Guerreros::~Guerreros() = default;
 
-void damagePorTurno(Personaje& personaje, shared_ptr<Personaje> enemigo, int damage) {
-    if (!enemigo) {
-        cerr << "Error: Enemigo no válido." << endl;
-        return;
-    }
-
-    if (personaje.getTurno()) {
-        cout << personaje.getNombre() << " ataca a " << enemigo->getNombre() << " con " 
-             << personaje.getArmaActual()->getNombreItem() << endl;
-        cout << "Daño infligido: " << damage << endl;
-    } else {
-        cout << enemigo->getNombre() << " te ha atacado!" << endl;
-    }
-
-    int nuevoHP = enemigo->getHP() - damage;
-    cout << "HP reducido a: " << nuevoHP << endl;
-    enemigo->setHP(nuevoHP);  // Solo se resta el daño una vez
-}
-
-
 void Guerreros::ataqueRapido(shared_ptr<Personaje> enemigo) {
     if (!enemigo) {
         cerr << "Error: Enemigo no válido." << endl;
         return;
     }
-
-    if (!armaActual) {
-        cout << "No tienes arma equipada" << endl;
-        cout << "Haces 10 de daño a " << enemigo->getNombre() << endl;
-        enemigo->setHP(enemigo->getHP() - 10);
-        return;
-    }
-
     int damage = armaActual->damAtaqueRapido();
     if (armaActual->getTipo() == "Arma Combate") {
         damage += damage / 3;
@@ -48,23 +20,14 @@ void Guerreros::ataqueRapido(shared_ptr<Personaje> enemigo) {
     if (this->isLegendario()) {
         damage += damage / 2 + fuerzaDelRey / 3;
     }
-    damagePorTurno(*this, enemigo, damage);
-    cout << "---------------------------------------------" << endl;
+    cout << damage;
+    enemigo->setHP(enemigo->getHP() - damage);
 }
-
 void Guerreros::ataqueFuerte(shared_ptr<Personaje> enemigo) {
     if (!enemigo) {
         cerr << "Error: Enemigo no válido." << endl;
         return;
     }
-
-    if (!armaActual) {
-        cout << "No tienes arma equipada" << endl;
-        cout << "Haces 10 de daño a " << enemigo->getNombre() << endl;
-        enemigo->setHP(enemigo->getHP() - 10);
-        return;
-    }
-
     int damage = armaActual->damAtaqueFuerte();
     if (armaActual->getTipo() == "Arma Combate") {
         damage += damage / 3;
@@ -72,19 +35,12 @@ void Guerreros::ataqueFuerte(shared_ptr<Personaje> enemigo) {
     if (this->isLegendario()) {
         damage += damage / 2 + fuerzaDelRey / 3;
     }
-    damagePorTurno(*this, enemigo, damage);
-    cout << "---------------------------------------------" << endl;
+    cout << damage;
+    enemigo->setHP(enemigo->getHP() - damage);
 }
-
 void Guerreros::defensaYGolpe(shared_ptr<Personaje> enemigo) {
     if (!enemigo) {
         cerr << "Error: Enemigo no válido." << endl;
-        return;
-    }
-    if (!armaActual) {
-        cout << "No tienes arma equipada" << endl;
-        cout << "Haces 10 de daño a " << enemigo->getNombre() << endl;
-        enemigo->setHP(enemigo->getHP() - 10);
         return;
     }
     int damage = armaActual->damDefensaYGolpe();
@@ -94,8 +50,8 @@ void Guerreros::defensaYGolpe(shared_ptr<Personaje> enemigo) {
     if (this->isLegendario()) {
         damage += damage / 2 + fuerzaDelRey / 3;
     }
-    damagePorTurno(*this, enemigo, damage);
-    cout << "---------------------------------------------" << endl;
+    cout << damage;
+    enemigo->setHP(enemigo->getHP() - damage);
 }
 void Guerreros::setHP(int newHp) {
     hp = newHp;
@@ -118,9 +74,6 @@ int Guerreros::getFuerzaDelRey() const {
 void Guerreros::setFuerzaDelRey(int newFDR) {
     fuerzaDelRey = newFDR;
 }
-void Guerreros::setTurno(bool turno) {
-    miTurno = turno;
-}
 void Guerreros::setArmaActual(shared_ptr<Arma> arma) {
     armaActual = arma;
 }
@@ -137,16 +90,12 @@ void Guerreros::removerArma(int index) {
         cout << "Index out of range" << endl;
     }
 }
-bool Guerreros::getTurno() const {
-    return miTurno;
-}
 shared_ptr<Arma> Guerreros::getArmaActual() const {
     return armaActual;
 }
-
-
-
+// ========================================================
 // ======================= Barbaro ========================
+// ========================================================
 
 Barbaro::Barbaro(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
     : Guerreros(nombre, hp, armas, armaActual) {
@@ -174,7 +123,6 @@ void Barbaro::gritar(shared_ptr<Personaje> enemigo) {
         cout << "No eres lider" << endl;
     }
 }
-
 void Barbaro::embestir(shared_ptr<Personaje> enemigo) {
     if (peso > 50) {
         cout << "Embestiendo enemigo" << endl;
@@ -207,8 +155,9 @@ void Barbaro::poderBerserker(shared_ptr<Personaje> enemigo) {
         cout << "No eres berserker" << endl;
     }
 }
-
+// =========================================================
 // ======================== Paladin ========================
+// =========================================================
 
 Paladin::Paladin(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
     : Guerreros(nombre, hp, armas, armaActual) {
@@ -270,8 +219,9 @@ void Paladin::poderDivino(shared_ptr<Personaje> enemigo) {
         cout << "No tienes suficiente nivel de fe" << endl;
     }
 }
-
+// ===========================================================
 // ======================== Caballero ========================
+// ===========================================================
 
 enum Unidad {
     UNIDAD_DE_FUEGO = 1,
@@ -364,8 +314,9 @@ void Caballero::cambiarUnidad(string nuevaUnidad) {
     unidad = nuevaUnidad;
     cout << "Unidad cambiada a: " << unidad << endl;
 }
-
+// ============================================================
 // ======================== Mercenario ========================
+// ============================================================
 
 Mercenario::Mercenario(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
     : Guerreros(nombre, hp, armas, armaActual) {
@@ -441,8 +392,9 @@ void Mercenario::montarJinete() {
         cout << "No eres jinete" << endl;
     }
 }
-
+// ===========================================================
 // ======================== Gladiador ========================
+// ===========================================================
 
 Gladiador::Gladiador(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
     : Guerreros(nombre, hp, armas, armaActual) {
@@ -511,4 +463,3 @@ void Gladiador::pasarPorElFuego(shared_ptr<Personaje> enemigo) {
         cout << "No tienes voluntad espartana" << endl;
     }
 }
-

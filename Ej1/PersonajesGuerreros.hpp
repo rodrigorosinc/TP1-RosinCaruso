@@ -20,9 +20,7 @@ class Guerreros : public Personaje {
         std::shared_ptr<Arma> armaActual;          // Luego armaActual
         std::string tipo;    // Finalmente tipo
         int fuerzaDelRey;
-        bool miTurno;
         bool legendario;
-
 
     public:
         Guerreros(std::string myNombre, int myHp, std::vector<std::shared_ptr<Arma>> myArmas, std::shared_ptr<Arma> myArmaActual);
@@ -31,12 +29,11 @@ class Guerreros : public Personaje {
         void ataqueRapido(std::shared_ptr<Personaje> enemigo) override;
         void ataqueFuerte(std::shared_ptr<Personaje> enemigo) override;
         void defensaYGolpe(std::shared_ptr<Personaje> enemigo) override;
+
         void setHP(int newHp) override;
         int getHP() const override;
         std::vector<std::shared_ptr<Arma>> getArmas() const override;
         void removerArma(int index) override;
-        void setTurno(bool turno) override;
-        bool getTurno() const override;
         std::shared_ptr<Arma> getArmaActual() const override;
         
         std::string getNombre() const;

@@ -13,22 +13,25 @@ class ArmaCombate : public Arma {
         bool legendaria;
         bool maldita;
     public:
-    // Constructor en el mismo orden:
         ArmaCombate(std::string arma, int damage, int sharpness, int letalidad, std::string tipo);
         virtual ~ArmaCombate();
-        virtual int calcularDamage() const = 0;
-        virtual int calcularAddedDamage() const = 0;
-        int calcularDamTotal() const;
+        //Defino los metodos virtuales de la clase Arma
         int damAtaqueRapido() const override;
         int damAtaqueFuerte() const override;
         int damDefensaYGolpe() const override;
-        int getDamage() const override;
+        //Getters y Setters
         std::string getNombreItem() const override;
-        void setDamage(int damage) override;
         std::string getTipo() const override;
-        void setMaldito(bool maldecir) override;
-        bool isMaldito() const override;
         int getDamTotal() const override;
+        int getDamage() const override;
+        bool isMaldito() const override;
+        void setDamage(int damage) override;
+        void setMaldito(bool maldecir) override;
+        //Funciones virtuales para las derivadas
+        virtual int calcularDamage() const = 0;
+        virtual int calcularAddedDamage() const = 0;
+        //Funcion para calcular el daño total
+        int calcularDamTotal() const;
 };
 
 class HachaSimple : public ArmaCombate {
@@ -41,7 +44,7 @@ class HachaSimple : public ArmaCombate {
     public:
         HachaSimple();
         ~HachaSimple() override;
-
+        //Metodos
         int calcularDamage() const override;
         int calcularAddedDamage() const override;
         void restaurar();
@@ -59,7 +62,7 @@ class HachaDoble : public ArmaCombate {
     public:
         HachaDoble();
         ~HachaDoble() override;
-
+        //Metodos
         int calcularDamage() const override;
         int calcularAddedDamage() const override;
         void afilar();
@@ -79,7 +82,7 @@ class Espada : public ArmaCombate {
     public:
         Espada();
         ~Espada() override;
-
+        //Metodos
         int calcularDamage() const override;
         int calcularAddedDamage() const override;
         void relucir();
@@ -98,7 +101,7 @@ class Lanza : public ArmaCombate {
     public:
         Lanza();
         ~Lanza() override;
-
+        //Metodos
         int calcularDamage() const override;
         int calcularAddedDamage() const override;
         void lanzar(std::shared_ptr<Personaje> enemigo);
@@ -116,7 +119,7 @@ class Garrote : public ArmaCombate {
     public:
         Garrote();
         ~Garrote() override;
-
+        //Metodos
         int calcularDamage() const override;
         int calcularAddedDamage() const override;
         void addPinchos(int cantidad);

@@ -17,36 +17,34 @@ class ItemMagico : public Arma {
         std::string tipo;
         bool maldito;
         bool mistico;
-
     public:
         ItemMagico(int myDamage, int myPoderMagico, int myCritico, bool myConsumible, std::string myArma);
         virtual ~ItemMagico();
-        
+        //Defino los metodos virtuales de la clase Arma
+        int damAtaqueRapido() const override;
+        int damAtaqueFuerte() const override;
+        int damDefensaYGolpe() const override;
+        //Getters y Setters (Los virtuales y los no virtuales)
+        int getDamage() const override;
+        int getDamTotal() const override;
+        std::string getCreador() const;
+        std::string getArma() const;
+        std::string getTipo() const;
+        std::string getNombreItem() const override;
+        void setDamage(int damage) override;
+        void setMaldito(bool maldecir) override;
+        void setMistico(bool mistico);
+        void setCreador(std::string creador);
+        //Metodos virtuales para todos los items magicos
         virtual void consumir(std::shared_ptr<Personaje> personaje) = 0;
         virtual int hacerDamCritico() const = 0;
         virtual int ataqueMistico() const = 0;     
         virtual void purificar(std::shared_ptr<Personaje> personaje) = 0; 
         virtual bool puedePurificar(std::shared_ptr<Personaje> personaje) const = 0;
-        
-        int calcularDamTotal() const;
-        int damAtaqueRapido() const override;
-        int damAtaqueFuerte() const override;
-        int damDefensaYGolpe() const override;
-        void setDamage(int damage) override;
-        std::string getNombreItem() const override;
-        void setMaldito(bool maldecir) override;
+        //Funciones complementarias
         bool isMaldito() const override;
-        int getDamage() const override;
-        int getDamTotal() const override;
-        
-        std::string getCreador() const;
-        std::string getArma() const;
-        std::string getTipo() const;
-        
-        void setMistico(bool mistico);
-
-        void setCreador(std::string creador);
         void maldecir();
+        int calcularDamTotal() const;
         bool isMistico() const;
         bool isConsumible() const;
 };
@@ -58,17 +56,17 @@ class Baston : public ItemMagico {
         int peso;
         float lentitud;
         bool reforjado;
-
     public:
         Baston();
         ~Baston() override;
-
+        //Metodos
         void consumir(std::shared_ptr<Personaje> personaje) override;
+        void purificar(std::shared_ptr<Personaje> personaje) override;
+        bool puedePurificar(std::shared_ptr<Personaje> personaje) const override;
         int hacerDamCritico() const override;
         int ataqueMistico() const override;
-        void purificar(std::shared_ptr<Personaje> personaje) override;
         void reforjar();
-        bool puedePurificar(std::shared_ptr<Personaje> personaje) const override;
+        //Funciones complementarias
         
         void setLargo(float largo);
         void setPeso(int peso);
@@ -85,13 +83,14 @@ class LibroDeHechizos : public ItemMagico {
     public:
         LibroDeHechizos();
         ~LibroDeHechizos() override;
-
+        //Metodos
+        bool puedePurificar(std::shared_ptr<Personaje> personaje) const override;
+        void purificar(std::shared_ptr<Personaje> personaje) override;
         void consumir(std::shared_ptr<Personaje> personaje) override;
         int hacerDamCritico() const override;
         int ataqueMistico() const override;
-        void purificar(std::shared_ptr<Personaje> personaje) override;
+        //Funciones complementarias
         void legendarizar(std::shared_ptr<Personaje> personaje);
-        bool puedePurificar(std::shared_ptr<Personaje> personaje) const override;
 };
 
 class Pocion : public ItemMagico {
@@ -105,12 +104,13 @@ class Pocion : public ItemMagico {
     public:
         Pocion();
         ~Pocion() override;
+        //Metodos
+        bool puedePurificar(std::shared_ptr<Personaje> personaje) const override;
+        void purificar(std::shared_ptr<Personaje> personaje) override;
         void consumir(std::shared_ptr<Personaje> personaje) override;
         int hacerDamCritico() const override;
         int ataqueMistico() const override;
-        void purificar(std::shared_ptr<Personaje> personaje) override;
-        bool puedePurificar(std::shared_ptr<Personaje> personaje) const override;
-
+        //Funciones complementarias
         bool verificarCaida(std::shared_ptr<Personaje> personaje) const;
 };
 
@@ -125,10 +125,12 @@ class Amuleto : public ItemMagico {
     public:
         Amuleto();
         ~Amuleto() override;
-        void consumir(std::shared_ptr<Personaje> personaje) override;
-        int hacerDamCritico() const override;
-        int ataqueMistico() const override;
-        void purificar(std::shared_ptr<Personaje> personaje) override;
+        //Metodos
         bool puedePurificar(std::shared_ptr<Personaje> personaje) const override;
+        void purificar(std::shared_ptr<Personaje> personaje) override;
+        void consumir(std::shared_ptr<Personaje> personaje) override;
+        int ataqueMistico() const override;
+        int hacerDamCritico() const override;
+        //Funciones complementarias
         void legendarizar(std::shared_ptr<Personaje> personaje);
 };

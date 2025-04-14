@@ -12,7 +12,6 @@ class Magos : public Personaje {
         std::vector<std::shared_ptr<Arma>> armas;
         std::shared_ptr<Arma> armaActual;
         int mana;
-        bool miTurno;
         bool legendario;
 
     public:
@@ -26,14 +25,12 @@ class Magos : public Personaje {
         int getHP() const override;
         std::vector<std::shared_ptr<Arma>> getArmas() const override;
         std::shared_ptr<Arma> getArmaActual() const override;
-        bool getTurno() const override;
 
         std::string getNombre() const;
         std::string getTipo() const;
         int getMana() const;
         
         void setMana(int newMana);
-        void setTurno(bool turno);
         void setArmaActual(std::shared_ptr<Arma> arma);
         void setLegendario(bool legendario) override;
         void removerArma(int index) override;

@@ -25,24 +25,32 @@ ItemMagico::ItemMagico(int damage, int critico, int poderMagico,
         int randomCreador = rand() % 4;
         switch (randomCreador) {
             case 0:
-                nombreCreador = "Ragnar Lothbrok";
-                break;
+            nombreCreador = "Ragnar Lothbrok";
+            break;
             case 1:
                 nombreCreador = "Gandalf";
                 break;
-            case 2:
+                case 2:
                 nombreCreador = "Pedro";
                 break;
-            case 3:
+                case 3:
                 nombreCreador = "Dr. Strange";
                 break;
+            }
         }
-    }
-    
+        
+int ItemMagico::damAtaqueRapido() const {
+    return 10 + calcularDamTotal();
+}
+int ItemMagico::damAtaqueFuerte() const {
+    return 10 + calcularDamTotal();
+}
+int ItemMagico::damDefensaYGolpe() const {
+    return 10 + calcularDamTotal();
+}
 int ItemMagico::getDamage() const {
     return damage;
 }
-
 string ItemMagico::getTipo() const {
     return tipo;
 }
@@ -85,18 +93,10 @@ int ItemMagico::calcularDamTotal() const {
 int ItemMagico::getDamTotal() const {
     return calcularDamTotal();
 }
-int ItemMagico::damAtaqueRapido() const {
-    return 10 + calcularDamTotal();
-}
-int ItemMagico::damAtaqueFuerte() const {
-    return 10 + calcularDamTotal();
-}
-int ItemMagico::damDefensaYGolpe() const {
-    return 10 + calcularDamTotal();
-}
 
+// ========================================================
 // ====================== BASTON ==========================
-
+// ========================================================
 enum Elemento {
     ABETO,
     ROBLE,
@@ -135,7 +135,8 @@ Baston::Baston()
       element(asignarElemento(*this)) {
         lentitud = round((largo / peso) * 10) / 10.0;
         reforjado = false;
-      }
+}
+Baston::~Baston() = default;
 
 void Baston::consumir(shared_ptr<Personaje> personaje) {
     personaje->setHP(personaje->getHP() + 1);
@@ -167,15 +168,12 @@ int Baston::ataqueMistico() const {
     }
     return 0;
 }
-
-void Baston::setPeso(int peso){
-    this->peso = peso;
+void Baston::setPeso(int newpeso){
+    peso = newpeso;
 }
-
-void Baston::setLargo(float largo){
-    this->largo = largo;
+void Baston::setLargo(float newlargo){
+    largo = newlargo;
 }
-
 void Baston::reforjar() {
     if (!reforjado) {
         cout << "El baston ha sido reforjado." << endl;
@@ -191,56 +189,56 @@ void Baston::reforjar() {
 bool Baston::puedePurificar(shared_ptr<Personaje> personaje) const {
     return personaje->getNombre() == "Brujo";
 }
-
-Baston::~Baston() = default;
-
-// ====================== LIBRO DE HECHIZOS ==========================
+// ========================================================
+// ====================== LIBRO DE HECHIZOS ===============
+// ========================================================
 
 LibroDeHechizos::LibroDeHechizos() :
-    ItemMagico(5, 20, 0, true, "Libro de Hechizos") { 
-        int random = rand() % 6;
-        if (random == 0) {
-            this->mistico = true;
-        }
-        maldito = false;
-        if (random == 1) {
-            this->maldito = true;
-        }
-
-        arma = "Libro de Hechizos";
-        
-        int cantHojas = rand() % 4700;
-        hojas = cantHojas;
-        
-        if (cantHojas == 0) {
-            additionalDamage = 0;
-            additionalCritico = 0;
-            additionalPoderMagico = 0;
-            damage*= additionalDamage;
-            critico*= additionalCritico;
-            poderMagico*= additionalPoderMagico;
-        } else if (cantHojas < 1000){
-            additionalCritico = 1;
-            additionalDamage = 3;
-            additionalPoderMagico = 2;
-        } else if (1000 < cantHojas && cantHojas < 2000){
-            additionalCritico = 2;
-            additionalDamage = 5;
-            additionalPoderMagico = 3;
-        } else if (2000 < cantHojas && cantHojas < 3000){
-            additionalCritico = 3;
-            additionalDamage = 7;
-            additionalPoderMagico = 4;
-        } else if (3000 < cantHojas && cantHojas < 4000){
-            additionalCritico = 4;
-            additionalDamage = 9;
-            additionalPoderMagico = 5;
-        } else {
-            additionalCritico = 5;
-            additionalDamage = 11;
-            additionalPoderMagico = 6;
-        }
+ItemMagico(5, 20, 0, true, "Libro de Hechizos") { 
+    int random = rand() % 6;
+    if (random == 0) {
+        this->mistico = true;
+    }
+    maldito = false;
+    if (random == 1) {
+        this->maldito = true;
+    }
+    
+    arma = "Libro de Hechizos";
+    
+    int cantHojas = rand() % 4700;
+    hojas = cantHojas;
+    
+    if (cantHojas == 0) {
+        additionalDamage = 0;
+        additionalCritico = 0;
+        additionalPoderMagico = 0;
+        damage*= additionalDamage;
+        critico*= additionalCritico;
+        poderMagico*= additionalPoderMagico;
+    } else if (cantHojas < 1000){
+        additionalCritico = 1;
+        additionalDamage = 3;
+        additionalPoderMagico = 2;
+    } else if (1000 < cantHojas && cantHojas < 2000){
+        additionalCritico = 2;
+        additionalDamage = 5;
+        additionalPoderMagico = 3;
+    } else if (2000 < cantHojas && cantHojas < 3000){
+        additionalCritico = 3;
+        additionalDamage = 7;
+        additionalPoderMagico = 4;
+    } else if (3000 < cantHojas && cantHojas < 4000){
+        additionalCritico = 4;
+        additionalDamage = 9;
+        additionalPoderMagico = 5;
+    } else {
+        additionalCritico = 5;
+        additionalDamage = 11;
+        additionalPoderMagico = 6;
+    }
 }
+LibroDeHechizos::~LibroDeHechizos() = default;
 bool LibroDeHechizos::puedePurificar(shared_ptr<Personaje> personaje) const {
     return personaje->getNombre() == "Brujo";
 }
@@ -294,9 +292,9 @@ void LibroDeHechizos::legendarizar(shared_ptr<Personaje> personaje) {
     }
 }
 
-LibroDeHechizos::~LibroDeHechizos() = default;
-
+// ========================================================
 // ====================== Pocion ==========================
+// ========================================================
 
 enum creadorPocion {
     HECHICERO,
@@ -366,13 +364,11 @@ void Pocion::consumir(shared_ptr<Personaje> personaje) {
         personaje->setHP(personaje->getHP() - subHp);
     }
 }
-
 void Pocion::purificar(shared_ptr<Personaje> personaje) {
     maldito = false;
     poderMagico -= 3;
     personaje->setHP(personaje->getHP() + 5);
 }
-
 int Pocion::hacerDamCritico() const {
     int random = rand() % 100;
     int critChance = critico + poderMagico;
@@ -390,7 +386,9 @@ int Pocion::ataqueMistico() const {
 
 Pocion::~Pocion() = default;
 
+// ========================================================
 // ====================== AMULETO ==========================
+// ========================================================
 
 Amuleto::Amuleto() :
     ItemMagico(5, 20, 0, true, "Amuleto") {
@@ -403,7 +401,6 @@ Amuleto::Amuleto() :
         additionalDamage = 0;
 }
 Amuleto::~Amuleto() = default;
-
 void Amuleto::consumir(shared_ptr<Personaje> personaje) {
     if (legendarizado) {
         cout << "El amuleto ha sido consumido." << endl;
@@ -413,7 +410,6 @@ void Amuleto::consumir(shared_ptr<Personaje> personaje) {
         cout << "El amuleto no se puede consumir." << endl;
     }
 }
-
 void Amuleto::purificar(shared_ptr<Personaje> personaje) {
     if (personaje->getNombre() == "Nigromante") {
         cout << "El amuleto ha sido desmaldecido." << endl;
@@ -422,7 +418,6 @@ void Amuleto::purificar(shared_ptr<Personaje> personaje) {
         cout << "El amuleto no puede ser desmaldecido por este personaje." << endl;
     }
 }
-
 int Amuleto::hacerDamCritico() const {
     int random = rand() % 100;
     int critChance = critico + poderMagico/3;
@@ -455,4 +450,3 @@ void Amuleto::legendarizar(shared_ptr<Personaje> personaje) {
         cout << "El amuleto ya ha sido legendarizado." << endl;
     }
 }
-

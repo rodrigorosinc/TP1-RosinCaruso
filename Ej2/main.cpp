@@ -14,12 +14,11 @@ int main() {
     cout << "Creando personajes..." << endl;
     PersonajeFactory::inicializarSemilla();
 
-    
+    cout << endl;
     auto personajes = PersonajeFactory::crearPersonajes();
     for (auto& p : personajes) {
         cout << p->getNombre() << " (" << p->getTipo() << ") - HP: " 
              << p->getHP() << " - Armas: " << p->getArmas().size() << endl;
-        cout << endl;
     }
     cout << "Total de personajes creados: " << personajes.size() << endl;
     cout << endl;

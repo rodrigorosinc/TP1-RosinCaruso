@@ -7,28 +7,22 @@
 using namespace std;
 
 enum NombreMagos {
-    GANDALF,
-    MERLIN,
-    DUMBLEDORE,
-    SARUMAN,
-    MORGANA,
-    ELMINSTER,
-    RINCEWIND,
-    RAISTLIN,
-    ZATANNA,
-    DR_STRANGE,
-    HARRY_POTTER,
-    HERMIONE_GRANGER,
-    SAURON,
-    BABA_YAGA,
-    YEN_SID,
-    GELLERT_GRINDELWALD,
-    WHITE_WITCH,
-    JARETH,
-    PROSPERO,
+    GANDALF, MERLIN, DUMBLEDORE, SARUMAN,
+    MORGANA, ELMINSTER, RINCEWIND, RAISTLIN,
+    ZATANNA, DR_STRANGE, HARRY_POTTER, HERMIONE_GRANGER,
+    SAURON, BABA_YAGA, YEN_SID, GELLERT_GRINDELWALD,
+    WHITE_WITCH, JARETH, PROSPERO, 
     NUM_MAGOS // Para contar el número de magos
 };
 
+enum NombreGuerreros {
+    CONAN, ACHILLES, LEONIDAS, ARTUR, BEOWULF,
+    LAGATHA, RED_SONJA, XENA, ARAGORN,
+    BOROMIR, GUTS, THOR, HERCULES, KRATOS,
+    BRIENNE_OF_TARTH, JAIME_LANNISTER,
+    JON_SNOW, MAXIMUS, MULAN, 
+    NUM_GUERREROS // Para contar el número de guerreros
+};
 
 std::string chooseNombreMagos() {
     int randomIndex = rand() % NUM_MAGOS;
@@ -55,6 +49,32 @@ std::string chooseNombreMagos() {
         default: return "Mago Desconocido"; // En caso de que no se haya elegido un nombre válido
     }
 }
+std::string chooseNombreGuerreros() {
+    int randomIndex = rand() % NUM_GUERREROS;
+    switch (randomIndex) {
+        case CONAN: return "Conan";
+        case ACHILLES: return "Achilles";
+        case LEONIDAS: return "Leonidas";
+        case ARTUR: return "Artur";
+        case BEOWULF: return "Beowulf";
+        case LAGATHA: return "Lagatha";
+        case RED_SONJA: return "Red Sonja";
+        case XENA: return "Xena";
+        case ARAGORN: return "Aragorn";
+        case BOROMIR: return "Boromir";
+        case GUTS: return "Guts";
+        case THOR: return "Thor";
+        case HERCULES: return "Hercules";
+        case KRATOS: return "Kratos";
+        case BRIENNE_OF_TARTH: return "Brienne of Tarth";
+        case JAIME_LANNISTER: return "Jaime Lannister";
+        case JON_SNOW: return "Jon Snow";
+        case MAXIMUS: return "Maximus";
+        case MULAN: return "Mulan";
+        default: return "Guerrero Desconocido";
+    }
+}
+
 
 void PersonajeFactory::inicializarSemilla(){
     static bool semillaInicializada = false;
@@ -62,14 +82,12 @@ void PersonajeFactory::inicializarSemilla(){
         return; // La semilla ya fue inicializada, no hacemos nada
     }
     semillaInicializada = true; // Marcamos que la semilla ha sido inicializada
-    srand(time(0));
+    srand(time(nullptr));
 }
-
 int PersonajeFactory::generarNumerosRandom(int limInf, int limSup){
     return (rand() % (limSup - limInf + 1) ) + limInf;  //limSup - limInf para mover el rango. Lim inf,
                                                         //afuera sumando porq es el min valor que queremos que tome
 }
-
 shared_ptr<Magos> PersonajeFactory::crearMago(){
     int tipoMago = generarNumerosRandom(0,3);
     string nombre = chooseNombreMagos();
@@ -101,10 +119,9 @@ shared_ptr<Magos> PersonajeFactory::crearMago(){
     return nullptr; // En caso de que no se haya creado un personaje
 
 }
-
 shared_ptr<Guerreros> PersonajeFactory::crearGuerrero(){
     int tipoGuerrero = generarNumerosRandom(0,4);
-    string nombre = chooseNombreMagos();
+    string nombre = chooseNombreGuerreros();
 
     int hp = rand() % 75 + 95; // HP entre 95 y 170
     vector<shared_ptr<Arma>> armas;
@@ -120,9 +137,10 @@ shared_ptr<Guerreros> PersonajeFactory::crearGuerrero(){
     
     shared_ptr<Arma> armaActual;
     if (!armas.empty()) {
-        armaActual = armas[0]; // Asignar la primera arma como arma actual
+        int randIndex = rand() % armas.size();
+        armaActual = armas[randIndex];
     } else {
-        armaActual = nullptr; // No hay armas, así que no hay arma actual
+        armaActual = nullptr; 
     }
     
     switch (tipoGuerrero){
@@ -134,7 +152,6 @@ shared_ptr<Guerreros> PersonajeFactory::crearGuerrero(){
     }
     return nullptr; // En caso de que no se haya creado un personaje
 }
-
 shared_ptr<ItemMagico> PersonajeFactory::crearItemMagico(){
     int tipoItem = generarNumerosRandom(0, 3);
 
@@ -146,7 +163,6 @@ shared_ptr<ItemMagico> PersonajeFactory::crearItemMagico(){
     }
     return nullptr; // En caso de que no se haya creado un item magico
 }
-
 shared_ptr<ArmaCombate> PersonajeFactory::crearArmaDeCombate(){
     int tipoArma = generarNumerosRandom(0, 4);
 
@@ -159,16 +175,16 @@ shared_ptr<ArmaCombate> PersonajeFactory::crearArmaDeCombate(){
     }
     return nullptr; // En caso de que no se haya creado un arma de combate
 }
-
 vector<shared_ptr<Personaje>> PersonajeFactory::crearPersonajes(){
     vector<shared_ptr<Personaje>> personajes;
     int numMagos = generarNumerosRandom(3, 7);
     int numGuerreros = generarNumerosRandom(3, 7);
     
+    cout << "Se crearon " << numMagos << " magos" << endl;
     for (int i = 0; i < numMagos; ++i) {
         personajes.push_back(crearMago());
     }
-    
+    cout << "Se crearon " << numGuerreros << " guerreros" << endl;
     for (int i = 0; i < numGuerreros; ++i) {
         personajes.push_back(crearGuerrero());
     }
