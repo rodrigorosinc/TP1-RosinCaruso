@@ -28,6 +28,7 @@ class ArmaCombate : public Arma {
         std::string getTipo() const override;
         void setMaldito(bool maldecir) override;
         bool isMaldito() const override;
+        int getDamTotal() const override;
 };
 
 class HachaSimple : public ArmaCombate {

@@ -82,7 +82,9 @@ string ItemMagico::getArma() const {
 int ItemMagico::calcularDamTotal() const {
     return hacerDamCritico() + ataqueMistico();
 }
-
+int ItemMagico::getDamTotal() const {
+    return calcularDamTotal();
+}
 int ItemMagico::damAtaqueRapido() const {
     return 10 + calcularDamTotal();
 }

@@ -17,5 +17,6 @@ class Arma{
         virtual void setMaldito(bool maldecir) = 0;
         virtual bool isMaldito() const = 0;
         virtual std::string getTipo() const = 0;
+        virtual int getDamTotal() const = 0;
 };
 

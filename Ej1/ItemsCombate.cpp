@@ -31,6 +31,9 @@ int ArmaCombate::damDefensaYGolpe() const {
 int ArmaCombate::getDamage() const {
     return damage;
 }
+int ArmaCombate::getDamTotal() const {
+    return calcularDamTotal();
+}
 string ArmaCombate::getTipo() const {
     return tipo;
 }

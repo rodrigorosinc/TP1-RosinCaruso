@@ -6,6 +6,35 @@
 
 using namespace std;
 
+/*
+. En este ejercicio se programarán la batalla entre sólo dos personajes del ejercicio 2. 
+Las reglas de las peleas siguen un modelo de piedra-papel-tijera, en este caso “Golpe 
+Fuerte”, “Golpe Rápido” y “Defensa y Golpe”.  
+4.1. Elección de ataque: El jugador 1 debe elegir por teclado una de las tres posibles 
+opciones. La opción del jugador 2 viene dada por una variable aleatoria 
+utilizando std::rand(). 
+4.2. Daño y defensa: El “Golpe Fuerte” le gana al “Golpe Rápido” y hace 10 puntos 
+de daño a quien lanzó el “Golpe Rápido”. El “Golpe Rápido” le gana a la “Defensa 
+y Golpe” y hace 10 puntos de daño a quien lanzó “Defensa y Golpe”. Si el 
+personaje usa “Defensa y Golpe” bloquea el “Golpe Fuerte” haciendo 10 puntos 
+de daño a quien lanzó el “Golpe Fuerte”. En caso de que los dos personajes 
+realicen la misma acción, ningún personaje recibirá daño y se pasa a la siguiente 
+ronda de elección. 
+4.3. Interacción: Dado un personaje y un arma, el programa debe indicar el tipo de 
+personaje y con qué arma atacó al otro personaje. Pierde el primer jugador que 
+llega perder todos sus 100 puntos de vida (Health Points o HP). OPCIONAL: si lo 
+desea, añada puntos dependiendo del arma utilizada. 
+4.4. Para iniciar a jugar, elija un personaje y un arma (el arma no modificará la pelea 
+a no ser que implemente los puntos extra de daño), y deje que el otro personaje 
+y arma sean elegidos aleatoriamente. Para seguir la batalla, implemente un 
+menú sencillo, por ejemplo: 
+El jugador 1 tiene XXX HP y el jugador 2 tiene YYY HP. 
+Su opción: (1) Golpe Fuerte, (2) Golpe Rápido, (3) Defensa y Golpe: 1 
+El Caballero ataca con la Espada y hace 10 puntos de daño. 
+El Caballero tiene XXX HP y el Brujo tiene YYY-10 HP. 
+Su opción: (1) Golpe Fuerte, (2) Golpe Rápido, (3) Defensa y Golpe: _
+*/
+
 enum Ataques {
     RAPIDO = 1,
     FUERTE,
@@ -13,6 +42,8 @@ enum Ataques {
 };
 
 int main(){
+    int damage, ataqueElegido, ataqueEnemigo, vidaPersonaje1, vidaPersonaje2;
+    cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     cout << "Creando personajes..." << endl;
     PersonajeFactory::inicializarSemilla();
     
@@ -22,17 +53,22 @@ int main(){
     int randomIndex = rand() % personajes.size();
 
     auto userPersonaje = personajes[randomIndex];
-    cout << "El personaje seleccionado es: " << userPersonaje->getNombre() << endl;
+    cout << "Tu personaje seleccionado es: " << userPersonaje->getNombre() << endl;
     cout << "Tipo: " << userPersonaje->getTipo() << endl;
     cout << "HP: " << userPersonaje->getHP() << endl;
-    cout << "Armas: " << endl;
-    for (const auto& arma : userPersonaje->getArmas()) {
-        cout << "- " << arma->getNombreItem() << " (Tipo: " 
-             << arma->getTipo() << ", Daño: " << arma->getDamage() 
-             << ")" << endl;
+    if (!userPersonaje->getArmas().empty()){
+        cout << "Armas: " << endl;
+        for (const auto& arma : userPersonaje->getArmas()) {
+            cout << "- " << arma->getNombreItem() << " (Tipo: " 
+                << arma->getTipo() << ", Daño: " << arma->getDamTotal() 
+                << ")" << endl;
+        }
+    } 
+    else {
+        cout << "No tienes armas." << endl;
     }
-    cout << endl;
 
+    cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     int randomIndex2 = rand() % personajes.size();
     while (randomIndex2 == randomIndex) {
         randomIndex2 = rand() % personajes.size();
@@ -42,86 +78,145 @@ int main(){
     cout << "El enemigo es: " << enemyPersonaje->getNombre() << endl;
     cout << "Tipo: " << enemyPersonaje->getTipo() << endl;
     cout << "HP: " << enemyPersonaje->getHP() << endl;
-    cout << "Armas: " << endl;
-    for (const auto& arma : enemyPersonaje->getArmas()) {
-        cout << "- " << arma->getNombreItem() << " (Tipo: " 
-             << arma->getTipo() << ", Daño: " << arma->getDamage() 
-             << ")" << endl;
-    }
-    cout << endl;
-
-    cout << "Comienza la batalla!" << endl;
-
-    bool empiezo = rand() % 2 == 0;
-    if (empiezo) {
-        cout << userPersonaje->getNombre() << " empieza!" << endl;
-        userPersonaje->setTurno(true);
-        enemyPersonaje->setTurno(false);
-    } else {
-        cout << enemyPersonaje->getNombre() << " empieza!" << endl;
-        userPersonaje->setTurno(false);
-        enemyPersonaje->setTurno(true);
-    }
-    cout << endl;
-
-    int ataqueElegido;
-    
-    while (userPersonaje->getHP() > 0 && enemyPersonaje->getHP() > 0){
-        if (userPersonaje->getTurno()) {
-            cout << userPersonaje->getNombre() << ", elige tu ataque:" << endl;
-            cout << "1. Ataque Rápido" << endl;
-            cout << "2. Ataque Fuerte" << endl;
-            cout << "3. Defensa y Golpe" << endl;
-            cout << "-> ";
-            cin >> ataqueElegido;
-            while (ataqueElegido < 1 || ataqueElegido > 3) {
-                cout << "Opción inválida. Elige nuevamente: ";
-                cin >> ataqueElegido;
-            }
-            cout << endl;
-            switch (ataqueElegido) {
-                case RAPIDO:
-                    cout << userPersonaje->getNombre() << " ataca!" << endl;
-                    userPersonaje->ataqueRapido(enemyPersonaje);
-                    cout << enemyPersonaje->getNombre() << " HP: " << enemyPersonaje->getHP() << endl;
-                    break;
-                case FUERTE:
-                    cout << userPersonaje->getNombre() << " ataca!" << endl;
-                    userPersonaje->ataqueFuerte(enemyPersonaje);
-                    cout << enemyPersonaje->getNombre() << " HP: " << enemyPersonaje->getHP() << endl;
-                    break;
-                case DEFENSA_Y_GOLPE:
-                    cout << userPersonaje->getNombre() << " ataca!" << endl;
-                    userPersonaje->defensaYGolpe(enemyPersonaje);
-                    cout << enemyPersonaje->getNombre() << " HP: " << enemyPersonaje->getHP() << endl;
-                    break;
-                default:
-                    cout << "Opción inválida." << endl;
-                    continue; // Volver a pedir la opción
-            }
-            userPersonaje->setTurno(false);
-            enemyPersonaje->setTurno(true);
-        } else {
-            cout << enemyPersonaje->getNombre() << " ataca!" << endl;
-            int ataqueAleatorio = rand() % 3 + 1; // Genera un número entre 1 y 3
-            switch (ataqueAleatorio) {
-                case RAPIDO:
-                    enemyPersonaje->ataqueRapido(userPersonaje);
-                    break;
-                case FUERTE:
-                    enemyPersonaje->ataqueFuerte(userPersonaje);
-                    break;
-                case DEFENSA_Y_GOLPE:
-                    enemyPersonaje->defensaYGolpe(userPersonaje);
-                    break;
-                default:
-                    cout << "Opción inválida." << endl;
-                    continue; // Volver a pedir la opción
-            }
-            cout << userPersonaje->getNombre() << " HP: " << userPersonaje->getHP() << endl;
-            userPersonaje->setTurno(true);
-            enemyPersonaje->setTurno(false);
+    if (!enemyPersonaje->getArmas().empty()){
+        cout << "Armas: " << endl;
+        for (const auto& arma : enemyPersonaje->getArmas()) {
+            cout << "- " << arma->getNombreItem() << " (Tipo: " 
+                << arma->getTipo() << ", Daño: " << arma->getDamTotal() 
+                << ")" << endl;
         }
+    } 
+    else {
+        cout << "No tiene armas." << endl;
     }
+    cout << endl;
+    cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+    cout << "Comienza la batalla!" << endl;
+    cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+    while (userPersonaje->getHP() > 0 && enemyPersonaje->getHP() > 0) {
+        cout << "Elige un ataque: " << endl;
+        cout << "(1) Golpe Rapido" << endl;
+        cout << "(2) Golpe Fuerte" << endl;
+        cout << "(3) Defensa y Golpe" << endl;
+        cout << "->";
+        cin >> ataqueElegido;
+        while (ataqueElegido < 1 || ataqueElegido > 3) {
+            cout << "Opcion invalida. Elige un ataque: ";
+            cin >> ataqueElegido;
+        }
+        cout << endl;
+
+        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        cout << "Tu eligiste: ";
+        if (ataqueElegido == RAPIDO) {
+            cout << "Golpe Rapido" << endl;
+        } else if (ataqueElegido == FUERTE) {
+            cout << "Golpe Fuerte" << endl;
+        } else if (ataqueElegido == DEFENSA_Y_GOLPE) {
+            cout << "Defensa y Golpe" << endl;
+        }
+        ataqueEnemigo = rand() % 3 + 1;
+        cout << "El enemigo elige: ";
+        if (ataqueEnemigo == RAPIDO) {
+            cout << "Golpe Rapido" << endl;
+        } else if (ataqueEnemigo == FUERTE) {
+            cout << "Golpe Fuerte" << endl;
+        } else if (ataqueEnemigo == DEFENSA_Y_GOLPE) {
+            cout << "Defensa y Golpe" << endl;
+        }
+        cout << endl;
+
+        if (ataqueElegido == FUERTE && ataqueEnemigo == RAPIDO) {
+            cout << "Ganaste el ataque!" << endl;
+            cout << "El ataque fuerte le gana al ataque rapido!" << endl;
+            if (userPersonaje->getArmas().size() > 0) {
+                damage = userPersonaje->getArmaActual()->damAtaqueFuerte();
+                enemyPersonaje->setHP(enemyPersonaje->getHP() - damage);
+                cout << "El enemigo recibe " << damage << " puntos de daño." << endl;
+            } else {
+                enemyPersonaje->setHP(enemyPersonaje->getHP() - 10);
+                cout << "El enemigo recibe 10 puntos de daño." << endl;
+            }
+        } else if (ataqueElegido == RAPIDO && ataqueEnemigo == FUERTE) {
+            cout << "Perdiste el ataque!" << endl;
+            cout << "El ataque fuerte le gana al rápido!" << endl;
+            if (enemyPersonaje->getArmas().size() > 0) {
+                damage = enemyPersonaje->getArmaActual()->damAtaqueRapido();
+                userPersonaje->setHP(enemyPersonaje->getHP() - damage);
+                cout << "Recibes " << damage << " puntos de daño." << endl;
+            } else {
+                userPersonaje->setHP(userPersonaje->getHP() - 10);
+                cout << "Recibes 10 puntos de daño." << endl;
+            }
+        } else if (ataqueElegido == DEFENSA_Y_GOLPE && ataqueEnemigo == FUERTE) {
+            cout << "Ganaste el ataque!" << endl;
+            cout << "El ataque defensa y golpe le gana al ataque fuerte!" << endl;
+            if (userPersonaje->getArmas().size() > 0) {
+                damage = userPersonaje->getArmaActual()->damDefensaYGolpe();
+                enemyPersonaje->setHP(enemyPersonaje->getHP() - damage);
+                cout << "El enemigo recibe " << damage << " puntos de daño." << endl;
+            } else {
+            enemyPersonaje->setHP(enemyPersonaje->getHP() - 10);
+            cout << "El enemigo recibe " << damage << " puntos de daño." << endl;
+            }
+        } else if (ataqueElegido == FUERTE && ataqueEnemigo == DEFENSA_Y_GOLPE) {
+            cout << "Perdiste el ataque!" << endl;
+            cout << "El ataque defensa y golpe le gana al ataque fuerte!" << endl;
+            if (enemyPersonaje->getArmas().size() > 0) {
+                damage = enemyPersonaje->getArmaActual()->damDefensaYGolpe();
+                userPersonaje->setHP(userPersonaje->getHP() - damage);
+                cout << "Tu personaje recibe " << damage << " puntos de daño." << endl;
+            } else {
+            userPersonaje->setHP(userPersonaje->getHP() - 10);
+            cout << "Tu personaje recibe 10 puntos de daño." << endl;
+            }
+        } else if (ataqueElegido == RAPIDO && ataqueEnemigo == DEFENSA_Y_GOLPE) {
+            cout << "Ganaste el ataque!" << endl;
+            cout << "El ataque rapido le gana a defensa y golpe!" << endl;
+            if (userPersonaje->getArmas().size() > 0) {
+                damage = userPersonaje->getArmaActual()->damAtaqueRapido();
+                enemyPersonaje->setHP(enemyPersonaje->getHP() - damage);
+                cout << "El enemigo recibe " << damage << " puntos de daño." << endl;
+            } else {
+                enemyPersonaje->setHP(enemyPersonaje->getHP() - 10);
+                cout << "El enemigo recibe 10 puntos de daño." << endl;
+            }
+        } else if (ataqueElegido == DEFENSA_Y_GOLPE && ataqueEnemigo == RAPIDO) {
+            cout << "Perdiste el ataque!" << endl;
+            cout << "El ataque defensa y golpe le gana al ataque rapido!" << endl;
+            if (enemyPersonaje->getArmas().size() > 0) {
+                damage = enemyPersonaje->getArmaActual()->damAtaqueRapido();
+                userPersonaje->setHP(userPersonaje->getHP() - damage);
+                cout << "Tu personaje recibe " << damage << " puntos de daño." << endl;
+            } else {
+                userPersonaje->setHP(userPersonaje->getHP() - 10);
+                cout << "Tu personaje recibe 10 puntos de daño." << endl;
+            }
+        } else {
+            cout << "Ambos personajes han elegido la misma accion. No hay daño." << endl;
+        }
+        cout << endl;
+        vidaPersonaje1 = userPersonaje->getHP();
+        vidaPersonaje2 = enemyPersonaje->getHP();
+        if (vidaPersonaje1 < 0) {
+            vidaPersonaje1 = 0;
+        }
+        if (vidaPersonaje2 < 0) {
+            vidaPersonaje2 = 0;
+        }
+        cout << "Tu personaje tiene " << vidaPersonaje1 << " HP." << endl;
+        cout << "El enemigo tiene " << vidaPersonaje2 << " HP." << endl;
+        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+    }
+    if (userPersonaje->getHP() <= 0) {
+        cout << "Perdiste la batalla!" << endl;
+        cout << "El personaje " << userPersonaje->getNombre() << " ha sido derrotado." << endl;
+    } else {
+        cout << "Has ganado!" << endl;
+        cout << "El personaje " << enemyPersonaje->getNombre() << " ha sido derrotado." << endl;
+    }
+    cout << "Fin de la batalla." << endl;
+    cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     return 0;
 }
