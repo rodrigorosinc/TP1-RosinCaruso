@@ -6,35 +6,6 @@
 
     using namespace std;
 
-    /*
-    . En este ejercicio se programarán la batalla entre sólo dos personajes del ejercicio 2. 
-    Las reglas de las peleas siguen un modelo de piedra-papel-tijera, en este caso “Golpe 
-    Fuerte”, “Golpe Rápido” y “Defensa y Golpe”.  
-    4.1. Elección de ataque: El jugador 1 debe elegir por teclado una de las tres posibles 
-    opciones. La opción del jugador 2 viene dada por una variable aleatoria 
-    utilizando std::rand(). 
-    4.2. Daño y defensa: El “Golpe Fuerte” le gana al “Golpe Rápido” y hace 10 puntos 
-    de daño a quien lanzó el “Golpe Rápido”. El “Golpe Rápido” le gana a la “Defensa 
-    y Golpe” y hace 10 puntos de daño a quien lanzó “Defensa y Golpe”. Si el 
-    personaje usa “Defensa y Golpe” bloquea el “Golpe Fuerte” haciendo 10 puntos 
-    de daño a quien lanzó el “Golpe Fuerte”. En caso de que los dos personajes 
-    realicen la misma acción, ningún personaje recibirá daño y se pasa a la siguiente 
-    ronda de elección. 
-    4.3. Interacción: Dado un personaje y un arma, el programa debe indicar el tipo de 
-    personaje y con qué arma atacó al otro personaje. Pierde el primer jugador que 
-    llega perder todos sus 100 puntos de vida (Health Points o HP). OPCIONAL: si lo 
-    desea, añada puntos dependiendo del arma utilizada. 
-    4.4. Para iniciar a jugar, elija un personaje y un arma (el arma no modificará la pelea 
-    a no ser que implemente los puntos extra de daño), y deje que el otro personaje 
-    y arma sean elegidos aleatoriamente. Para seguir la batalla, implemente un 
-    menú sencillo, por ejemplo: 
-    El jugador 1 tiene XXX HP y el jugador 2 tiene YYY HP. 
-    Su opción: (1) Golpe Fuerte, (2) Golpe Rápido, (3) Defensa y Golpe: 1 
-    El Caballero ataca con la Espada y hace 10 puntos de daño. 
-    El Caballero tiene XXX HP y el Brujo tiene YYY-10 HP. 
-    Su opción: (1) Golpe Fuerte, (2) Golpe Rápido, (3) Defensa y Golpe: _
-    */
-
     enum Ataques {
         RAPIDO = 1,
         FUERTE,
@@ -49,10 +20,20 @@
         // Crear personajes
         auto personajes = PersonajeFactory::crearPersonajes();
         cout << "Personajes creados!" << endl;
-        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-        int randomIndex = rand() % personajes.size();
-
-        auto userPersonaje = personajes[randomIndex];
+        cout << "Elija uno: " << endl;
+        int personajeElegido;
+        for (size_t i = 0; i < personajes.size(); ++i) {
+            cout << "(" << i + 1 << ") " << personajes[i]->getNombre() 
+                << " (" << personajes[i]->getTipo() << ")" << endl;
+        }
+        cout << "->";
+        cin >> personajeElegido;
+        while (personajeElegido < 1 || personajeElegido > (int)personajes.size()) {
+            cout << "Opcion invalida. Elija uno: ";
+            cin >> personajeElegido;
+        }
+        cout << endl;
+        auto userPersonaje = personajes[personajeElegido - 1];   
         cout << "Tu personaje seleccionado es: " << userPersonaje->getNombre() << endl;
         cout << "Tipo: " << userPersonaje->getTipo() << endl;
         cout << "HP: " << userPersonaje->getHP() << endl;
@@ -63,19 +44,27 @@
                     << arma->getTipo() << ", Daño: " << arma->getDamTotal() 
                     << ")" << endl;
             }
-        } 
-        else {
+            cout << "Seleccione una: " << endl;
+            int armaElegida;
+            cin >> armaElegida;
+            while (armaElegida < 1 || armaElegida > (int) userPersonaje->getArmas().size()) {
+                cout << "Opcion invalida. Seleccione una: ";
+                cin >> armaElegida;
+            }
+            userPersonaje->setArmaActual(userPersonaje->getArmas()[armaElegida - 1]);
+
+        } else {
             cout << "No tienes armas." << endl;
         }
 
         cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        cout << "Tu enemigo sera: " << endl;
         int randomIndex2 = rand() % personajes.size();
-        while (randomIndex2 == randomIndex) {
+        while (randomIndex2 == personajeElegido - 1) {
             randomIndex2 = rand() % personajes.size();
         }
-
         auto enemyPersonaje = personajes[randomIndex2];
-        cout << "El enemigo es: " << enemyPersonaje->getNombre() << endl;
+        cout << enemyPersonaje->getNombre() << endl;
         cout << "Tipo: " << enemyPersonaje->getTipo() << endl;
         cout << "HP: " << enemyPersonaje->getHP() << endl;
         if (!enemyPersonaje->getArmas().empty()){

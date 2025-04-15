@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -Wpedantic -g
 SRC = ItemsCombate.cpp ItemsMagicos.cpp PersonajesGuerrero.cpp PersonajesMagicos.cpp main.cpp
 OBJ = $(SRC:.cpp=.o)
-EXE = juego.exe
+EXE = Ej1.exe
 
 all: $(EXE)
 

@@ -11,7 +11,7 @@ SRC = batalla.cpp \
       ../Ej2/PersonajeFactory.cpp
 
 OBJ = $(SRC:.cpp=.o)
-EXEC = batalla.exe
+EXEC = Ej3.exe
 
 all: $(EXEC)
 
@@ -23,3 +23,5 @@ $(EXEC): $(OBJ)
 
 clean:
 	rm -f $(EXEC) $(OBJ)
+.PHONY: all clean
+

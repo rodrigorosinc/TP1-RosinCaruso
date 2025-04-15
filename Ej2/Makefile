@@ -22,7 +22,7 @@ SRCS = \
 OBJS = $(SRCS:.cpp=.o)
 
 # Ejecutable
-EXEC = $(BIN)/main.exe
+EXEC = $(BIN)/Ej2.exe
 
 # Regla principal
 all: $(EXEC)

@@ -22,6 +22,7 @@ class Personaje {
         // Setters
         virtual void setHP(int newHp) = 0;
         virtual void setLegendario(bool legendario) = 0;
+        virtual void setArmaActual(std::shared_ptr<Arma> arma) = 0;
         // Funciones complementarias
         virtual void removerArma(int index) = 0;
 };

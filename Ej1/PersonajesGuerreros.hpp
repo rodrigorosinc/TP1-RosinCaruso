@@ -14,11 +14,11 @@ derivadas deberán tener al menos 5 atributos y 5 métodos.*/
 
 class Guerreros : public Personaje {
     protected:
-        std::string nombre;  // Mover primero
-        int hp;             // Luego hp
-        std::vector<std::shared_ptr<Arma>> armas;  // Luego armas
-        std::shared_ptr<Arma> armaActual;          // Luego armaActual
-        std::string tipo;    // Finalmente tipo
+        std::string nombre;  
+        int hp;
+        std::vector<std::shared_ptr<Arma>> armas; 
+        std::shared_ptr<Arma> armaActual;    
+        std::string tipo;
         int fuerzaDelRey;
         bool legendario;
 
@@ -35,13 +35,13 @@ class Guerreros : public Personaje {
         std::vector<std::shared_ptr<Arma>> getArmas() const override;
         void removerArma(int index) override;
         std::shared_ptr<Arma> getArmaActual() const override;
+        void setArmaActual(std::shared_ptr<Arma> arma) override;
         
         std::string getNombre() const;
         std::string getTipo() const;
         int getFuerzaDelRey() const;
 
         void setFuerzaDelRey(int newFDR);
-        void setArmaActual(std::shared_ptr<Arma> arma);
         void setLegendario(bool legendario);
 
         bool isLegendario() const;

@@ -33,8 +33,7 @@ class ItemMagico : public Arma {
         std::string getNombreItem() const override;
         void setDamage(int damage) override;
         void setMaldito(bool maldecir) override;
-        void setMistico(bool mistico);
-        void setCreador(std::string creador);
+        bool isMaldito() const override;
         //Metodos virtuales para todos los items magicos
         virtual void consumir(std::shared_ptr<Personaje> personaje) = 0;
         virtual int hacerDamCritico() const = 0;
@@ -42,7 +41,8 @@ class ItemMagico : public Arma {
         virtual void purificar(std::shared_ptr<Personaje> personaje) = 0; 
         virtual bool puedePurificar(std::shared_ptr<Personaje> personaje) const = 0;
         //Funciones complementarias
-        bool isMaldito() const override;
+        void setMistico(bool mistico);
+        void setCreador(std::string creador);
         void maldecir();
         int calcularDamTotal() const;
         bool isMistico() const;
