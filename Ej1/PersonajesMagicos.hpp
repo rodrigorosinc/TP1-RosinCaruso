@@ -17,24 +17,25 @@ class Magos : public Personaje {
     public:
         Magos(std::string myNombre, int myHp, std::vector<std::shared_ptr<Arma>> myArmas, std::shared_ptr<Arma> myArmaActual);
         virtual ~Magos();
-
+        // Ataques
         void ataqueRapido(std::shared_ptr<Personaje> enemigo) override;
         void ataqueFuerte(std::shared_ptr<Personaje> enemigo) override;
         void defensaYGolpe(std::shared_ptr<Personaje> enemigo) override;
+        // Setters y Getters Virtuales
         void setHP(int newHp) override;
         int getHP() const override;
         std::vector<std::shared_ptr<Arma>> getArmas() const override;
         std::shared_ptr<Arma> getArmaActual() const override;
         void setArmaActual(std::shared_ptr<Arma> arma) override;
-
+        // getters
         std::string getNombre() const;
         std::string getTipo() const;
         int getMana() const;
-        
+        // setters
         void setMana(int newMana);
         void setLegendario(bool legendario) override;
+        // Funciones complementarias
         void removerArma(int index) override;
-
         bool isLegendario() const;
 };
 
