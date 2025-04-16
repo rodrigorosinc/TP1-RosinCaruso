@@ -2,7 +2,7 @@
 
 using namespace std;
 
-ArmaCombate::ArmaCombate(std::string arma_, int damage_, int sharpness_, int letalidad_, std::string tipo_)
+ArmaCombate::ArmaCombate(string arma_, int damage_, int sharpness_, int letalidad_, string tipo_)
 : letalidad(letalidad_), damage(damage_), sharpness(sharpness_), 
   arma(arma_), tipo(tipo_) {}
 ArmaCombate::~ArmaCombate() = default;
@@ -34,8 +34,8 @@ string ArmaCombate::getTipo() const {
 bool ArmaCombate::isMaldito() const {
     return maldita;
 }
-void ArmaCombate::setDamage(int dam) {
-    damage = dam;
+void ArmaCombate::setDamage(int myDamage) {
+    damage = myDamage;
 }
 void ArmaCombate::setMaldito(bool maldecir) {
     maldita = maldecir;

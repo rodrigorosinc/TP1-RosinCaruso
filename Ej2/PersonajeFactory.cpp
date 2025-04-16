@@ -105,7 +105,7 @@ shared_ptr<Magos> PersonajeFactory::crearMago(){
     }
     shared_ptr<Arma> armaActual;
     if (!armas.empty()) {
-        armaActual = armas[0]; // Asignar la primera como arma actual
+        armaActual = armas[0]; // Asignar la primera como arma actual, después se puede cambiar
     } else {
         armaActual = nullptr;
     }
@@ -173,15 +173,15 @@ shared_ptr<ArmaCombate> PersonajeFactory::crearArmaDeCombate(){
 
 vector<shared_ptr<Personaje>> PersonajeFactory::crearPersonajes(){
     vector<shared_ptr<Personaje>> personajes;
-    int numMagos = generarNumerosRandom(3, 7);
+    int numMagos = generarNumerosRandom(3, 7); 
     int numGuerreros = generarNumerosRandom(3, 7);
     cout << "Se crearon " << numMagos << " magos" << endl;
     for (int i = 0; i < numMagos; ++i) {
-        personajes.push_back(crearMago());
+        personajes.push_back(crearMago()); // Crear entre 3 y 7 magos, con entre 0 y 2 armas
     }
     cout << "Se crearon " << numGuerreros << " guerreros" << endl;
     for (int i = 0; i < numGuerreros; ++i) {
-        personajes.push_back(crearGuerrero());
+        personajes.push_back(crearGuerrero()); // Crear entre 3 y 7 guerreros, con entre 0 y 2 armas
     }
     return personajes;
 }

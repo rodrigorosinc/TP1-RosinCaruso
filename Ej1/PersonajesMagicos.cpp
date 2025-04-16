@@ -4,8 +4,8 @@
 
 using namespace std;
 
-Magos::Magos(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
-    : tipo("Mago"), nombre(myNombre), hp(myHp), armas(myArmas), armaActual(myArmaActual) {}
+Magos::Magos(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, shared_ptr<Arma> armaActual_)
+    : tipo("Mago"), nombre(nombre_), hp(hp_), armas(armas_), armaActual(armaActual_) {}
 Magos::~Magos() = default;
 
 void Magos::ataqueRapido(shared_ptr<Personaje> enemigo) {
@@ -22,6 +22,7 @@ void Magos::ataqueRapido(shared_ptr<Personaje> enemigo) {
     }
     cout << damage;
     enemigo->setHP(enemigo->getHP() - damage);
+    return;
 }
 void Magos::ataqueFuerte(shared_ptr<Personaje> enemigo) {
     if (!enemigo) {
@@ -37,6 +38,7 @@ void Magos::ataqueFuerte(shared_ptr<Personaje> enemigo) {
     }
     cout << damage;
     enemigo->setHP(enemigo->getHP() - damage);
+    return;
 }
 void Magos::defensaYGolpe(shared_ptr<Personaje> enemigo) {
     if (!enemigo) {
@@ -52,6 +54,7 @@ void Magos::defensaYGolpe(shared_ptr<Personaje> enemigo) {
     }
     cout << damage;
     enemigo->setHP(enemigo->getHP() - damage);
+    return;
 }
 void Magos::setHP(int newHp) {
     hp = newHp;
@@ -74,7 +77,6 @@ void Magos::setArmaActual(shared_ptr<Arma> arma) {
 void Magos::setMana(int newMana) {
     mana = newMana;
 }
-
 string Magos::getNombre() const {
     return nombre;
 }
@@ -95,12 +97,10 @@ shared_ptr<Arma> Magos::getArmaActual() const {
     return armaActual;
 }
 
-// ===========================================================
-// ======================== Hechicero ========================
-// ===========================================================
+// ======================== Hechicero =======================================================
 
-Hechicero::Hechicero(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
-    : Magos(myNombre, myHp, myArmas, myArmaActual) {
+Hechicero::Hechicero(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, shared_ptr<Arma> armaActual_) 
+    : Magos(nombre_, hp_, armas_, armaActual_) {
         int randomNum = rand();
         tienePocionEscudo = randomNum % 2 == 0;
         tienePocionRecuperacion = randomNum % 2 == 0;
@@ -129,7 +129,7 @@ void Hechicero::pocionEscudo() {
 }
 void Hechicero::pocionRecuperacion() {
     if (tienePocionRecuperacion) {
-        cout << "Usando pocion de recuperacion" << endl;
+        cout << "Usando pocion de recuperacion." << endl;
         tienePocionRecuperacion = false;
         if (mana <= 0) {
             mana = 1;
@@ -163,7 +163,6 @@ void Hechicero::pocionFuria() {
         cout << "No tienes pocion de furia" << endl;
     }
 }
-
 void Hechicero::pocionX2() {
     if (tienePocionX2) {
         cout << "Usando pocion de x2" << endl;
@@ -176,12 +175,11 @@ void Hechicero::pocionX2() {
         cout << "No tienes pocion de x2" << endl;
     }
 }
-// ============================================================
-// ======================== Conjurador ========================
-// ============================================================
 
-Conjurador::Conjurador(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
-    : Magos(myNombre, myHp, myArmas, myArmaActual) {
+// ======================== Conjurador ===================================================
+
+Conjurador::Conjurador(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, shared_ptr<Arma> armaActual_)
+    : Magos(nombre_, hp_, armas_, armaActual_) {
         int randomNum = rand();
         conjuroOscuro = randomNum % 2 == 0;
         conjuroLuminoso = randomNum % 2 == 0;
@@ -193,6 +191,7 @@ Conjurador::Conjurador(string myNombre, int myHp, vector<shared_ptr<Arma>> myArm
         legendario = randomNum2 % 10 == 0;
 }
 Conjurador::~Conjurador() = default;
+
 void Conjurador::conjurarOscuro(shared_ptr<Personaje> enemigo) {
     if (conjuroOscuro) {
         cout << "Conjurando conjuro oscuro" << endl;
@@ -235,7 +234,6 @@ void Conjurador::maldecir(shared_ptr<Personaje> enemigo) {
         cout << "Ya has maldecido a un enemigo" << endl;
     }
 }
-
 void Conjurador::purificar(shared_ptr<Personaje> enemigo) {
     if (!purificado) {
         cout << "Purificando arma" << endl;
@@ -253,12 +251,11 @@ void Conjurador::purificar(shared_ptr<Personaje> enemigo) {
         cout << "Ya has purificado un arma" << endl;
     }
 }
-// ======================================================
-// ======================= Brujo ========================
-// ======================================================
 
-Brujo::Brujo(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
-    : Magos(myNombre, myHp, myArmas, myArmaActual) {
+// ======================= Brujo =================================================
+
+Brujo::Brujo(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, shared_ptr<Arma> armaActual_)
+    : Magos(nombre_, hp_, armas_, armaActual_) {
         int randomNum = rand();
         embrujado = randomNum % 3 == 0;
         abracadabra = randomNum % 5 == 0;
@@ -270,6 +267,7 @@ Brujo::Brujo(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared
         legendario = randomNum2 % 10 == 0;
 }
 Brujo::~Brujo() = default;
+
 void Brujo::embrujar(shared_ptr<Personaje> enemigo) {
     if (embrujado) {
         cout << "Embrujando enemigo" << endl;
@@ -292,7 +290,7 @@ void Brujo::hacerAbracadabra(shared_ptr<Personaje> enemigo) {
 }
 void Brujo::hacerMetamorfosis(shared_ptr<Personaje> enemigo) {
     if (metamorfosis) {
-        cout << "Haciendo metamorfosis" << endl;
+        cout << "Se ha producido la metamorfosis!" << endl;
         metamorfosis = false;
         enemigo->setHP(enemigo->getHP() - 30 - mana/10);
         cout << "HP enemigo reducido a: " << enemigo->getHP() << endl;
@@ -302,7 +300,7 @@ void Brujo::hacerMetamorfosis(shared_ptr<Personaje> enemigo) {
 }
 void Brujo::hacerHiperMetamorfosis(shared_ptr<Personaje> enemigo) {
     if (hiperMetamorfosis) {
-        cout << "Haciendo hiper metamorfosis" << endl;
+        cout << "El enemigo fue hiper-metamorfizado!!" << endl;
         hiperMetamorfosis = false;
         enemigo->setHP(enemigo->getHP() - 40 - mana/10);
         cout << "HP enemigo reducido a: " << enemigo->getHP() << endl;
@@ -320,12 +318,11 @@ void Brujo::recuperse() {
         cout << "No tienes yin yang" << endl;
     }
 }
-// ===================================================
-// ==================== Nigromante ===================
-// ===================================================
 
-Nigromante::Nigromante(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
-    : Magos(myNombre, myHp, myArmas, myArmaActual) {
+// ==================== Nigromante ========================================================
+
+Nigromante::Nigromante(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, shared_ptr<Arma> armaActual_)
+    : Magos(nombre_, hp_, armas_, armaActual_) {
         int randomNum = rand();
         invocoEspectro = randomNum % 2 == 0;
         invocoFantasma = randomNum % 3 == 0;
@@ -337,6 +334,7 @@ Nigromante::Nigromante(string myNombre, int myHp, vector<shared_ptr<Arma>> myArm
         legendario = randomNum2 % 10 == 0;
 }
 Nigromante::~Nigromante() = default;
+
 void Nigromante::invocarEspectro(shared_ptr<Personaje> enemigo) {
     if (invocoEspectro) {
         cout << "Invocando espectro" << endl;

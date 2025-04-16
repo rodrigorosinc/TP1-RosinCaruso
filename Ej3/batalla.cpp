@@ -25,13 +25,13 @@ int main(){
     cout << "Elija uno: " << endl;
     int personajeElegido;
     for (int i = 0; i < (int) personajes.size(); ++i) {
-        cout << "(" << i + 1 << ") " << personajes[i]->getNombre() 
+        cout << "(" << i + 1 << ") " << personajes[i]->getNombre()
             << " (" << personajes[i]->getTipo() << ")" << endl;
     }
     cout << "->";
     cin >> personajeElegido;
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-
+    // Validar la entrada del usuario
     while (personajeElegido < 1 || personajeElegido > (int)personajes.size()) {
         cout << "Opcion invalida. Elija uno: ";
         cin >> personajeElegido;
@@ -41,6 +41,7 @@ int main(){
     cout << "Tu personaje seleccionado es: " << userPersonaje->getNombre() << endl;
     cout << "Tipo: " << userPersonaje->getTipo() << endl;
     cout << "HP: " << userPersonaje->getHP() << endl;
+    // Mostrar armas del personaje si tiene. Se le solicita seleccionar una.
     if (!userPersonaje->getArmas().empty()){
         cout << "+ Armas: " << endl;
         for (auto& arma : userPersonaje->getArmas()) {
@@ -48,7 +49,7 @@ int main(){
                 << arma->getTipo() << ", Daño: " << arma->getDamTotal() 
                 << ")" << endl;
         }
-        if (userPersonaje->getArmas().size() > 1) {
+        if (userPersonaje->getArmas().size() > 1) { // Si tiene más de una arma, se le pide elegir
             cout << "Seleccione una: " << endl;
             int armaElegida;
             cin >> armaElegida;
@@ -58,7 +59,7 @@ int main(){
             }
             userPersonaje->setArmaActual(userPersonaje->getArmas()[armaElegida - 1]);
             cout << "Arma seleccionada: " << userPersonaje->getArmas()[armaElegida - 1]->getNombreItem() << endl;
-        } else {
+        } else { // Si solo tiene una arma, se selecciona automaticamente
             userPersonaje->setArmaActual(userPersonaje->getArmas()[0]);
             cout << "Tu arma es: " << userPersonaje->getArmas()[0]->getNombreItem() << endl;
         }
@@ -67,6 +68,7 @@ int main(){
     }
 
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+    // Elegir enemigo al azar
     cout << "Tu enemigo sera: " << endl;
     int randomIndex2 = rand() % (int) personajes.size();
     while (randomIndex2 == personajeElegido - 1) {
@@ -88,6 +90,8 @@ int main(){
         cout << "No tiene armas." << endl;
     }
     cout << endl;
+
+    // Batalla
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     cout << "       Comienza la batalla!" << endl;
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
@@ -124,7 +128,7 @@ int main(){
         }
         cout << endl;
 
-        if (ataqueElegido == FUERTE && ataqueEnemigo == RAPIDO) {
+        if (ataqueElegido == FUERTE && ataqueEnemigo == RAPIDO) { // Fuerte le gana a Rapido
             cout << "Ganaste el ataque!" << endl;
             cout << "El ataque fuerte le gana al ataque rapido!" << endl;
             if (userPersonaje->getArmas().size() > 0) {
@@ -146,7 +150,7 @@ int main(){
                 userPersonaje->setHP(userPersonaje->getHP() - 10);
                 cout << "Recibes 10 puntos de daño." << endl;
             }
-        } else if (ataqueElegido == DEFENSA_Y_GOLPE && ataqueEnemigo == FUERTE) {
+        } else if (ataqueElegido == DEFENSA_Y_GOLPE && ataqueEnemigo == FUERTE) { // Defensa y Golpe le gana a Fuerte
             cout << "Ganaste el ataque!" << endl;
             cout << "El ataque defensa y golpe le gana al ataque fuerte!" << endl;
             if (userPersonaje->getArmas().size() > 0) {
@@ -168,7 +172,7 @@ int main(){
             userPersonaje->setHP(userPersonaje->getHP() - 10);
             cout << "Tu personaje recibe 10 puntos de daño." << endl;
             }
-        } else if (ataqueElegido == RAPIDO && ataqueEnemigo == DEFENSA_Y_GOLPE) {
+        } else if (ataqueElegido == RAPIDO && ataqueEnemigo == DEFENSA_Y_GOLPE) { // Rapido le gana a Defensa y Golpe
             cout << "Ganaste el ataque!" << endl;
             cout << "El ataque rapido le gana a defensa y golpe!" << endl;
             if (userPersonaje->getArmas().size() > 0) {
@@ -195,6 +199,7 @@ int main(){
             cout << "Ambos personajes han elegido la misma accion. No hay daño." << endl;
         }
         cout << endl;
+        // Mostrar HP de ambos personajes
         vidaPersonaje1 = userPersonaje->getHP();
         vidaPersonaje2 = enemyPersonaje->getHP();
         if (vidaPersonaje1 < 0) {
@@ -207,7 +212,7 @@ int main(){
         cout << "Vida del Enemigo: " << vidaPersonaje2 << endl;
         cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     }
-    
+    // Mostrar resultado de la batalla
     if (userPersonaje->getHP() <= 0 && enemyPersonaje->getHP() <= 0) {
         cout << "Empate! Ambos personajes cayeron al mismo tiempo." << endl;
     } else if (userPersonaje->getHP() <= 0) {

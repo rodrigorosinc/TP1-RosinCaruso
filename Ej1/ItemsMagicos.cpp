@@ -58,11 +58,11 @@ void ItemMagico::setMistico(bool setMistico) {
 bool ItemMagico::isMistico() const {
     return mistico;
 }
-void ItemMagico::setCreador(string myCreador) {
-    nombreCreador = myCreador;
+void ItemMagico::setCreador(string setCreador) {
+    nombreCreador = setCreador;
 }
-void ItemMagico::setDamage(int dam) {
-    damage = dam;
+void ItemMagico::setDamage(int myDamage) {
+    damage = myDamage;
 }
 string ItemMagico::getArma() const {
     return arma;
@@ -102,7 +102,7 @@ Baston::Baston()
             peso = 50;
             break;
     }
-    lentitud = round((largo / peso) * 10) / 10.0;
+    lentitud = round((largo / peso) * 10) / 10.0; // Redondeo a un decimal
     reforjado = false;
 }
 Baston::~Baston() = default;
@@ -116,18 +116,18 @@ void Baston::consumir(shared_ptr<Personaje> personaje) {
     }
 }
 void Baston::purificar(shared_ptr<Personaje> personaje) {
-    if (personaje->getNombre() == "Brujo") {
-        cout << "El baston ha sido desmaldecido." << endl;
+    if (puedePurificar(personaje)) {
+        cout << "El baston ha sido purificado." << endl;
         maldito = false;
     } else {
-        cout << "El baston no puede ser desmaldecido por este personaje." << endl;
+        cout << "El baston no puede ser purificado por este personaje." << endl;
     }
 }
 int Baston::hacerDamCritico() const {
     int random = rand() % 100;
     int critChance = critico + poderMagico/5;
     if (random < critChance) {
-        return damage * 2 * lentitud;
+        return damage * 3 * lentitud;
     }
     return damage * lentitud;
 }
@@ -137,17 +137,10 @@ int Baston::ataqueMistico() const {
     }
     return 0;
 }
-void Baston::setPeso(int newpeso){
-    peso = newpeso;
-}
-void Baston::setLargo(float newlargo){
-    largo = newlargo;
-}
 void Baston::reforjar() {
     if (!reforjado) {
         cout << "El baston ha sido reforjado." << endl;
         cout << "Nuevo elemento: " << element << endl;
-        
         int randIndex = rand() % 3;
         switch (randIndex) {
             case 0:
@@ -166,9 +159,16 @@ void Baston::reforjar() {
         return;
     }
     cout << "No se puede reforjar el baston nuevamente." << endl;
+    return;
 }
 bool Baston::puedePurificar(shared_ptr<Personaje> personaje) const {
     return personaje->getNombre() == "Brujo";
+}
+void Baston::setPeso(int newpeso){
+    peso = newpeso;
+}
+void Baston::setLargo(float newlargo){
+    largo = newlargo;
 }
 
 // ====================== LIBRO DE HECHIZOS ===============================================================
@@ -218,7 +218,7 @@ ItemMagico(5, 20, 0, true, "Libro de Hechizos") {
 LibroDeHechizos::~LibroDeHechizos() = default;
 
 bool LibroDeHechizos::puedePurificar(shared_ptr<Personaje> personaje) const {
-    return personaje->getNombre() == "Brujo";
+    return personaje->getNombre() == "Hechicero";
 }
 void LibroDeHechizos::consumir(shared_ptr<Personaje> personaje) {
     if (!maldito){
@@ -232,11 +232,11 @@ void LibroDeHechizos::consumir(shared_ptr<Personaje> personaje) {
     }
 }
 void LibroDeHechizos::purificar(shared_ptr<Personaje> personaje) {
-    if (personaje->getNombre() == "Brujo") {
-        cout << "El libro de hechizos ha sido desmaldecido." << endl;
+    if (puedePurificar(personaje)) {;
+        cout << "El libro de hechizos ha sido pruficado." << endl;
         maldito = false;
     } else {
-        cout << "El libro de hechizos no puede ser desmaldecido por este personaje." << endl;
+        cout << "El libro de hechizos no puede ser purificado por este personaje." << endl;
     }
 }
 int LibroDeHechizos::hacerDamCritico() const {
@@ -297,9 +297,9 @@ Pocion::~Pocion() = default;
 bool Pocion::verificarCaida(shared_ptr<Personaje> personaje) const {
     int random = rand() % 100;
     if (random < probSeCaiga) {
-        cout << "Se cayó la poción, máquina." << endl;
+        cout << "Se cayó la poción!!" << endl;
         if (isGood) {
-            cout << "Safaste, la poción es buena." << endl;
+            cout << "Suerte! la poción es buena." << endl;
             personaje->setHP(personaje->getHP() + addHp);
         } else {
             cout << "La poción es mala. Se te restan " << subHp << " de vida." << endl;
@@ -310,7 +310,9 @@ bool Pocion::verificarCaida(shared_ptr<Personaje> personaje) const {
     return false;
 }
 bool Pocion::puedePurificar(shared_ptr<Personaje> personaje) const {
-    return personaje->getNombre() == nombreCreador;
+    return personaje->getNombre() == "Hechicero" || personaje->getNombre() == "Conjurador" 
+           || personaje->getNombre() == "Brujo" || personaje->getNombre() == "Nigromante"; 
+           // Todos los personajes pueden purificar la poción
 }
 void Pocion::consumir(shared_ptr<Personaje> personaje) {
     if (isGood) {
@@ -322,9 +324,12 @@ void Pocion::consumir(shared_ptr<Personaje> personaje) {
     }
 }
 void Pocion::purificar(shared_ptr<Personaje> personaje) {
-    maldito = false;
-    poderMagico -= 3;
-    personaje->setHP(personaje->getHP() + 5);
+    if (puedePurificar(personaje)) {
+        maldito = false;
+        poderMagico -= 3;
+        personaje->setHP(personaje->getHP() + 5);
+        cout << "La poción ha sido purificada." << endl;
+    }
 }
 int Pocion::hacerDamCritico() const {
     int random = rand() % 100;
@@ -365,11 +370,11 @@ void Amuleto::consumir(shared_ptr<Personaje> personaje) {
     }
 }
 void Amuleto::purificar(shared_ptr<Personaje> personaje) {
-    if (personaje->getNombre() == "Nigromante") {
-        cout << "El amuleto ha sido desmaldecido." << endl;
+    if (puedePurificar(personaje)) {
+        cout << "El amuleto ha sido purificado." << endl;
         maldito = false;
     } else {
-        cout << "El amuleto no puede ser desmaldecido por este personaje." << endl;
+        cout << "El amuleto no puede ser purificado por este personaje." << endl;
     }
 }
 int Amuleto::hacerDamCritico() const {
@@ -398,7 +403,7 @@ void Amuleto::legendarizar(shared_ptr<Personaje> personaje) {
             cout << "El personaje ha sido legendarizado." << endl;
         }
         else {
-            cout << "El amuleto no se puede legendarizar debido a la maldicion." << endl;
+            cout << "El amuleto no se puede legendarizar debido a la maldicion que posee." << endl;
         }
     } else {
         cout << "El amuleto ya ha sido legendarizado." << endl;

@@ -4,7 +4,6 @@ CXX = g++
 CXXFLAGS = -std=c++17 -g -Wall -Wextra -Wpedantic -Werror \
            -Wshadow -Wnull-dereference -I../Ej1 -I../Ej2
 
-
 SRC = batalla.cpp \
       ../Ej1/ItemsCombate.cpp \
       ../Ej1/ItemsMagicos.cpp \
@@ -16,6 +15,9 @@ OBJ = $(SRC:.cpp=.o)
 EXEC = Ej3.exe
 
 all: $(EXEC)
+
+valgrind: $(EXE)
+	valgrind --leak-check=full --show-leak-kinds=all ./$(EXEC)
 
 $(EXEC): $(OBJ)
 	$(CXX) $(OBJ) -o $@

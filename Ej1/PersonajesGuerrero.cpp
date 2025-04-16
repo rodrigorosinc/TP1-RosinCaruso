@@ -4,8 +4,8 @@
 
 using namespace std;
 
-Guerreros::Guerreros(string myNombre, int myHp, vector<shared_ptr<Arma>> myArmas, shared_ptr<Arma> myArmaActual)
-    : nombre(myNombre), hp(myHp), armas(myArmas), armaActual(myArmaActual), tipo("Guerrero") {}
+Guerreros::Guerreros(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, shared_ptr<Arma> armaActual_)
+    : nombre(nombre_), hp(hp_), armas(armas_), armaActual(armaActual_), tipo("Guerrero") {}
 Guerreros::~Guerreros() = default;
 
 void Guerreros::ataqueRapido(shared_ptr<Personaje> enemigo) {
@@ -93,9 +93,8 @@ void Guerreros::removerArma(int index) {
 shared_ptr<Arma> Guerreros::getArmaActual() const {
     return armaActual;
 }
-// ========================================================
-// ======================= Barbaro ========================
-// ========================================================
+
+// ======================= Barbaro =====================================================
 
 Barbaro::Barbaro(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, shared_ptr<Arma> armaActual_)
     : Guerreros(nombre_, hp_, armas_, armaActual_) {
@@ -155,9 +154,8 @@ void Barbaro::poderBerserker(shared_ptr<Personaje> enemigo) {
         cout << "No eres berserker" << endl;
     }
 }
-// =========================================================
-// ======================== Paladin ========================
-// =========================================================
+// ======================== Paladin ======================================================
+
 Paladin::Paladin(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, shared_ptr<Arma> armaActual_)
     : Guerreros(nombre_, hp_, armas_, armaActual_) {
         int randomNum = rand();
@@ -174,8 +172,8 @@ Paladin::Paladin(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, share
             setLegendario(false);
         }
 }
-
 Paladin::~Paladin() = default;
+
 void Paladin::espadazo(shared_ptr<Personaje> enemigo) {
     if (espadaDeLaVerdad) {
         cout << "Usando espada de la verdad" << endl;
@@ -219,9 +217,7 @@ void Paladin::poderDivino(shared_ptr<Personaje> enemigo) {
         cout << "No tienes suficiente nivel de fe" << endl;
     }
 }
-// ===========================================================
-// ======================== Caballero ========================
-// ===========================================================
+// ======================== Caballero =================================================
 
 enum Unidad {
     UNIDAD_DE_FUEGO = 1,
@@ -258,7 +254,6 @@ Caballero::Caballero(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, s
             setLegendario(false);
         }
 }
-
 Caballero::~Caballero() = default;
 
 void Caballero::curarse() {
@@ -314,9 +309,7 @@ void Caballero::cambiarUnidad(string nuevaUnidad) {
     unidad = nuevaUnidad;
     cout << "Unidad cambiada a: " << unidad << endl;
 }
-// ============================================================
-// ======================== Mercenario ========================
-// ============================================================
+// ======================== Mercenario ===========================================================
 
 Mercenario::Mercenario(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, shared_ptr<Arma> armaActual_)
     : Guerreros(nombre_, hp_, armas_, armaActual_) {
@@ -392,9 +385,8 @@ void Mercenario::montarCaballo() {
         cout << "No eres jinete" << endl;
     }
 }
-// ===========================================================
-// ======================== Gladiador ========================
-// ===========================================================
+// ======================== Gladiador ======================================================
+
 Gladiador::Gladiador(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, shared_ptr<Arma> armaActual_)
     : Guerreros(nombre_, hp_, armas_, armaActual_) {
         int randomNum = rand();
@@ -412,6 +404,7 @@ Gladiador::Gladiador(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, s
         }
 }
 Gladiador::~Gladiador() = default;
+
 void Gladiador::gritar(shared_ptr<Personaje> enemigo) {
     if (espartano) {
         cout << "ESPARTANOOOS AUU AUU AUUUUU!!!!!!" << endl;
