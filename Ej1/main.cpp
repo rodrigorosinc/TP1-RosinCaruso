@@ -9,6 +9,7 @@
 using namespace std;
 
 int main(){
+    // Ejemplo de uso de las clases
     shared_ptr<Personaje> personaje1 = make_shared<Barbaro>("Barbaro", 100, vector<shared_ptr<Arma>>(), nullptr);
     shared_ptr<Personaje> personaje2 = make_shared<Nigromante>("Nigromante", 100, vector<shared_ptr<Arma>>(), nullptr);
 
@@ -19,7 +20,6 @@ int main(){
     cout << "Personaje 2: " << personaje2->getNombre() << endl;
     cout << "Tipo: " << personaje2->getTipo() << endl;
     cout << "HP: " << personaje2->getHP() << endl;
-
 
     return 0;
 }

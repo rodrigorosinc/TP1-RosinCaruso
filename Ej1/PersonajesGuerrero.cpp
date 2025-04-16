@@ -97,8 +97,8 @@ shared_ptr<Arma> Guerreros::getArmaActual() const {
 // ======================= Barbaro ========================
 // ========================================================
 
-Barbaro::Barbaro(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
-    : Guerreros(nombre, hp, armas, armaActual) {
+Barbaro::Barbaro(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, shared_ptr<Arma> armaActual_)
+    : Guerreros(nombre_, hp_, armas_, armaActual_) {
         int randomNum = rand(); 
         peso = randomNum % 100 + 1;
         fuerza = randomNum % 100;
@@ -158,9 +158,8 @@ void Barbaro::poderBerserker(shared_ptr<Personaje> enemigo) {
 // =========================================================
 // ======================== Paladin ========================
 // =========================================================
-
-Paladin::Paladin(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
-    : Guerreros(nombre, hp, armas, armaActual) {
+Paladin::Paladin(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, shared_ptr<Arma> armaActual_)
+    : Guerreros(nombre_, hp_, armas_, armaActual_) {
         int randomNum = rand();
         espadaDeLaVerdad = true;
         yelmoDeLaEsperanza = randomNum % 2 == 0;
@@ -175,6 +174,7 @@ Paladin::Paladin(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_p
             setLegendario(false);
         }
 }
+
 Paladin::~Paladin() = default;
 void Paladin::espadazo(shared_ptr<Personaje> enemigo) {
     if (espadaDeLaVerdad) {
@@ -229,9 +229,8 @@ enum Unidad {
     UNIDAD_DE_TIERRA,
     UNIDAD_DE_AIRE
 };
-
-Caballero::Caballero(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
-    : Guerreros(nombre, hp, armas, armaActual) {
+Caballero::Caballero(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, shared_ptr<Arma> armaActual_)
+    : Guerreros(nombre_, hp_, armas_, armaActual_) {
         int randomNum = rand();
         switch (randomNum % 4) {
         case UNIDAD_DE_FUEGO:
@@ -259,6 +258,7 @@ Caballero::Caballero(string nombre, int hp, vector<shared_ptr<Arma>> armas, shar
             setLegendario(false);
         }
 }
+
 Caballero::~Caballero() = default;
 
 void Caballero::curarse() {
@@ -318,8 +318,8 @@ void Caballero::cambiarUnidad(string nuevaUnidad) {
 // ======================== Mercenario ========================
 // ============================================================
 
-Mercenario::Mercenario(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
-    : Guerreros(nombre, hp, armas, armaActual) {
+Mercenario::Mercenario(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, shared_ptr<Arma> armaActual_)
+    : Guerreros(nombre_, hp_, armas_, armaActual_) {
         int randomNum = rand();
         fuerzaDelRey = 15;
         inteligencia = randomNum % 100 + 1;
@@ -339,10 +339,10 @@ Mercenario::~Mercenario() = default;
 void Mercenario::robar(shared_ptr<Personaje> enemigo) {
     if (apetitoDeDinero > 50) {
         cout << "Robando enemigo" << endl;
-        auto armas = enemigo->getArmas();
+        auto enemyArmas = enemigo->getArmas();
         if (!armas.empty()) {
-            int randomIndex = rand() % (int)armas.size();
-            shared_ptr<Arma> armaRobada = armas[randomIndex];
+            int randomIndex = rand() % (int)enemyArmas.size();
+            shared_ptr<Arma> armaRobada = enemyArmas[randomIndex];
             cout << "Robando arma: " << armaRobada->getNombreItem() << endl;
             enemigo->removerArma(randomIndex);
             setArmaActual(armaRobada);
@@ -382,7 +382,7 @@ void Mercenario::atacarPorVenganza(shared_ptr<Personaje> enemigo) {
         cout << "No eres vengador" << endl;
     }
 }
-void Mercenario::montarJinete() {
+void Mercenario::montarCaballo() {
     if (jinete) {
         cout << "Montando jinete" << endl;
         jinete = false;
@@ -395,9 +395,8 @@ void Mercenario::montarJinete() {
 // ===========================================================
 // ======================== Gladiador ========================
 // ===========================================================
-
-Gladiador::Gladiador(string nombre, int hp, vector<shared_ptr<Arma>> armas, shared_ptr<Arma> armaActual)
-    : Guerreros(nombre, hp, armas, armaActual) {
+Gladiador::Gladiador(string nombre_, int hp_, vector<shared_ptr<Arma>> armas_, shared_ptr<Arma> armaActual_)
+    : Guerreros(nombre_, hp_, armas_, armaActual_) {
         int randomNum = rand();
         fuerzaDelRey = 20;
         espartano = randomNum % 2 == 0;

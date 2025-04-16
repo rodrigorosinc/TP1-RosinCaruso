@@ -13,20 +13,20 @@ class ArmaCombate : public Arma {
         bool legendaria;
         bool maldita;
     public:
-        ArmaCombate(std::string arma, int damage, int sharpness, int letalidad, std::string tipo);
+        ArmaCombate(std::string arma_, int damage_, int sharpness_, int letalidad_, std::string tipo_);
         virtual ~ArmaCombate();
         //Defino los metodos virtuales de la clase Arma
         int damAtaqueRapido() const override;
         int damAtaqueFuerte() const override;
         int damDefensaYGolpe() const override;
-        //Getters y Setters
+        //Getters y Setters virtuales
         std::string getNombreItem() const override;
         std::string getTipo() const override;
         int getDamTotal() const override;
         int getDamage() const override;
-        bool isMaldito() const override;
         void setDamage(int damage) override;
         void setMaldito(bool maldecir) override;
+        bool isMaldito() const override;
         //Funciones virtuales para las derivadas
         virtual int calcularDamage() const = 0;
         virtual int calcularAddedDamage() const = 0;

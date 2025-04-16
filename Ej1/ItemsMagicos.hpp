@@ -17,19 +17,16 @@ class ItemMagico : public Arma {
         std::string tipo;
         bool maldito;
         bool mistico;
+
     public:
-        ItemMagico(int myDamage, int myPoderMagico, int myCritico, bool myConsumible, std::string myArma);
+        ItemMagico(int damage_, int poderMagico_, int critico_, bool consumible_, std::string armaName);
         virtual ~ItemMagico();
         //Defino los metodos virtuales de la clase Arma
         int damAtaqueRapido() const override;
         int damAtaqueFuerte() const override;
         int damDefensaYGolpe() const override;
-        //Getters y Setters (Los virtuales y los no virtuales)
         int getDamage() const override;
         int getDamTotal() const override;
-        std::string getCreador() const;
-        std::string getArma() const;
-        std::string getTipo() const;
         std::string getNombreItem() const override;
         void setDamage(int damage) override;
         void setMaldito(bool maldecir) override;
@@ -41,12 +38,13 @@ class ItemMagico : public Arma {
         virtual void purificar(std::shared_ptr<Personaje> personaje) = 0; 
         virtual bool puedePurificar(std::shared_ptr<Personaje> personaje) const = 0;
         //Funciones complementarias
+        std::string getArma() const;
+        std::string getTipo() const;
         void setMistico(bool mistico);
         void setCreador(std::string creador);
         void maldecir();
         int calcularDamTotal() const;
         bool isMistico() const;
-        bool isConsumible() const;
 };
 
 class Baston : public ItemMagico {
@@ -67,7 +65,6 @@ class Baston : public ItemMagico {
         int ataqueMistico() const override;
         void reforjar();
         //Funciones complementarias
-        
         void setLargo(float largo);
         void setPeso(int peso);
 };

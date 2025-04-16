@@ -116,7 +116,7 @@ class Mercenario : public Guerreros {
         void atacarPorDinero(std::shared_ptr<Personaje> enemigo);
         void atacarPorJusticia(std::shared_ptr<Personaje> enemigo);
         void atacarPorVenganza(std::shared_ptr<Personaje> enemigo);
-        void montarJinete();
+        void montarCaballo();
 };
 
 class Gladiador : public Guerreros {

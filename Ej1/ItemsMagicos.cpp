@@ -9,36 +9,22 @@ enum NombreCreador {
 
 using namespace std;
 
+ItemMagico::ItemMagico(int damage_, int poderMagico_, int critico_, bool consumible_, string armaName)
+    : damage(damage_), poderMagico(poderMagico_), critico(critico_), 
+      consumible(consumible_), nombreCreador(""), arma(armaName), tipo("Item Magico") {
+    int random = rand() % 4;
+    this->maldito = (random == 0);
+    
+    int randomCreador = rand() % 4;
+    switch (randomCreador) {
+        case 0: nombreCreador = "Ragnar Lothbrok"; break;
+        case 1: nombreCreador = "Gandalf"; break;
+        case 2: nombreCreador = "Pedro"; break;
+        case 3: nombreCreador = "Dr. Strange"; break;
+    }
+}
 ItemMagico::~ItemMagico() = default;
 
-ItemMagico::ItemMagico(int damage, int critico, int poderMagico,
-    bool consumible, std::string arma)
-    : damage(damage), poderMagico(poderMagico), critico(critico), 
-    consumible(consumible), arma(arma), tipo("Item Magico"), 
-    mistico(false) {
-        int random = rand() % 4;
-        if (random == 0) {
-            this->maldito = true;
-        } else {
-            this->maldito = false;
-        }
-        int randomCreador = rand() % 4;
-        switch (randomCreador) {
-            case 0:
-            nombreCreador = "Ragnar Lothbrok";
-            break;
-            case 1:
-                nombreCreador = "Gandalf";
-                break;
-                case 2:
-                nombreCreador = "Pedro";
-                break;
-                case 3:
-                nombreCreador = "Dr. Strange";
-                break;
-            }
-        }
-        
 int ItemMagico::damAtaqueRapido() const {
     return 10 + calcularDamTotal();
 }
@@ -66,23 +52,17 @@ void ItemMagico::maldecir() {
 void ItemMagico::setMaldito(bool maldecir) {
     maldito = maldecir;
 }
-string ItemMagico::getCreador() const {
-    return nombreCreador;
-}
-void ItemMagico::setMistico(bool mistico) {
-    this->mistico = mistico;
+void ItemMagico::setMistico(bool setMistico) {
+    mistico = setMistico;
 }
 bool ItemMagico::isMistico() const {
     return mistico;
 }
-bool ItemMagico::isConsumible() const {
-    return consumible;
-}
-void ItemMagico::setCreador(string creador) {
-    this->nombreCreador = creador;
+void ItemMagico::setCreador(string myCreador) {
+    nombreCreador = myCreador;
 }
 void ItemMagico::setDamage(int dam) {
-    this->damage = dam;
+    damage = dam;
 }
 string ItemMagico::getArma() const {
     return arma;
@@ -94,47 +74,36 @@ int ItemMagico::getDamTotal() const {
     return calcularDamTotal();
 }
 
-// ========================================================
-// ====================== BASTON ==========================
-// ========================================================
+// ====================== BASTON =========================================================================
+
 enum Elemento {
     ABETO,
     ROBLE,
     METAL
 };
-
-string asignarElemento(Baston& baston) {
+Baston::Baston()
+    : ItemMagico(10, 50, 0, false, "Baston") {
     // Asigno elemento al azar
     int random = rand() % 3;  
-    string element;
     switch (random) {
-        case 0:
+        case ABETO:
             element = "Abeto";
-            baston.setDamage(baston.getDamage() + 2);
-            baston.setLargo(1.7);
-            baston.setPeso(30);
+            largo = 1.7;
+            peso = 30;
             break;
-        case 1:
+        case ROBLE:
             element = "Roble";
-            baston.setDamage(baston.getDamage() + 3);
-            baston.setLargo(1.5);
-            baston.setPeso(27);
+            largo = 1.5;
+            peso = 27;
             break;
-        case 2:
+        case METAL:
             element = "Metal";
-            baston.setDamage(baston.getDamage() + 5);
-            baston.setLargo(1.2);
-            baston.setPeso(50);
+            largo = 1.2;
+            peso = 50;
             break;
     }
-    return element;
-}
-
-Baston::Baston()
-    : ItemMagico(10, 50, 0, false, "Baston"),
-      element(asignarElemento(*this)) {
-        lentitud = round((largo / peso) * 10) / 10.0;
-        reforjado = false;
+    lentitud = round((largo / peso) * 10) / 10.0;
+    reforjado = false;
 }
 Baston::~Baston() = default;
 
@@ -178,7 +147,19 @@ void Baston::reforjar() {
     if (!reforjado) {
         cout << "El baston ha sido reforjado." << endl;
         cout << "Nuevo elemento: " << element << endl;
-        element = asignarElemento(*this);
+        
+        int randIndex = rand() % 3;
+        switch (randIndex) {
+            case 0:
+                element = "Abeto";
+                break;
+            case 1:
+                element = "Roble";
+                break;
+            case 2:
+                element = "Metal";
+                break;
+        }
         damage += 5;
         critico += 2;
         reforjado = true;
@@ -189,9 +170,8 @@ void Baston::reforjar() {
 bool Baston::puedePurificar(shared_ptr<Personaje> personaje) const {
     return personaje->getNombre() == "Brujo";
 }
-// ========================================================
-// ====================== LIBRO DE HECHIZOS ===============
-// ========================================================
+
+// ====================== LIBRO DE HECHIZOS ===============================================================
 
 LibroDeHechizos::LibroDeHechizos() :
 ItemMagico(5, 20, 0, true, "Libro de Hechizos") { 
@@ -203,12 +183,9 @@ ItemMagico(5, 20, 0, true, "Libro de Hechizos") {
     if (random == 1) {
         this->maldito = true;
     }
-    
     arma = "Libro de Hechizos";
-    
     int cantHojas = rand() % 4700;
     hojas = cantHojas;
-    
     if (cantHojas == 0) {
         additionalDamage = 0;
         additionalCritico = 0;
@@ -239,6 +216,7 @@ ItemMagico(5, 20, 0, true, "Libro de Hechizos") {
     }
 }
 LibroDeHechizos::~LibroDeHechizos() = default;
+
 bool LibroDeHechizos::puedePurificar(shared_ptr<Personaje> personaje) const {
     return personaje->getNombre() == "Brujo";
 }
@@ -253,7 +231,6 @@ void LibroDeHechizos::consumir(shared_ptr<Personaje> personaje) {
         cout << "El libro de hechizos no se puede consumir debido a la maldicion." << endl;
     }
 }
-
 void LibroDeHechizos::purificar(shared_ptr<Personaje> personaje) {
     if (personaje->getNombre() == "Brujo") {
         cout << "El libro de hechizos ha sido desmaldecido." << endl;
@@ -292,9 +269,7 @@ void LibroDeHechizos::legendarizar(shared_ptr<Personaje> personaje) {
     }
 }
 
-// ========================================================
-// ====================== Pocion ==========================
-// ========================================================
+// ====================== Pocion =================================================================
 
 enum creadorPocion {
     HECHICERO,
@@ -303,40 +278,22 @@ enum creadorPocion {
     NIGROMANTE
 };
 
-string asignarCreadorPocion(Pocion& pocion) {
-    // Asigno creador al azar
-    int random = rand() % 4;  
-    switch (random) {
-        case 0:
-            pocion.setCreador("Hechicero");
-            return "Hechicero";
-        case 1:
-            pocion.setCreador("Conjurador");
-            return "Conjurador";
-        case 2:
-            pocion.setCreador("Brujo");
-            return "Brujo";
-        case 3:
-            pocion.setCreador("Nigromante");
-            return "Nigromante";
+Pocion::Pocion() : 
+    ItemMagico(5, 35, 35, true, "Pocion"), isGood(false), seCayo(false) {
+    probSeCaiga =  rand() % 15;
+    int random = rand() % 3;
+    if (random == 0) {
+        isGood = false;
+        addHp = 0;
+        subHp = 30;
+    } else {
+        isGood = true;
+        addHp = 20;
+        subHp = 0;
     }
-    return "Ninguno";
 }
+Pocion::~Pocion() = default;
 
-Pocion::Pocion():
-ItemMagico(5, 35, 35, true, "Pocion"), isGood(false), seCayo(false) {
-        probSeCaiga =  rand() % 15;
-        int random = rand() % 3;
-        if (random == 0) {
-            isGood = false;
-            addHp = 0;
-            subHp = 30;
-        } else {
-            isGood = true;
-            addHp = 20;
-            subHp = 0;
-        }
-}
 bool Pocion::verificarCaida(shared_ptr<Personaje> personaje) const {
     int random = rand() % 100;
     if (random < probSeCaiga) {
@@ -384,11 +341,7 @@ int Pocion::ataqueMistico() const {
     return 0;
 }
 
-Pocion::~Pocion() = default;
-
-// ========================================================
-// ====================== AMULETO ==========================
-// ========================================================
+// ====================== AMULETO ==================================================================
 
 Amuleto::Amuleto() :
     ItemMagico(5, 20, 0, true, "Amuleto") {
@@ -401,6 +354,7 @@ Amuleto::Amuleto() :
         additionalDamage = 0;
 }
 Amuleto::~Amuleto() = default;
+
 void Amuleto::consumir(shared_ptr<Personaje> personaje) {
     if (legendarizado) {
         cout << "El amuleto ha sido consumido." << endl;

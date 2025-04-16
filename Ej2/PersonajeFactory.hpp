@@ -9,12 +9,13 @@
 
 class PersonajeFactory {
     public:
-    static void inicializarSemilla();
-    static int generarNumerosRandom(int limInf, int limSup);
-    static std::shared_ptr<Magos> crearMago();
-    static std::shared_ptr<Guerreros> crearGuerrero();
-    static std::shared_ptr<ItemMagico> crearItemMagico();
-    static std::shared_ptr<ArmaCombate> crearArmaDeCombate();
-    static std::vector<std::shared_ptr<Personaje>> crearPersonajes();
+        // Funciones para crear personajes
+        static void inicializarSemilla();
+        static int generarNumerosRandom(int limInf, int limSup);
+        static std::shared_ptr<Magos> crearMago();
+        static std::shared_ptr<Guerreros> crearGuerrero();
+        static std::shared_ptr<ItemMagico> crearItemMagico();
+        static std::shared_ptr<ArmaCombate> crearArmaDeCombate();
+        static std::vector<std::shared_ptr<Personaje>> crearPersonajes();
 };
 

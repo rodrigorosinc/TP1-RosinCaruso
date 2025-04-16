@@ -2,9 +2,9 @@
 
 using namespace std;
 
-ArmaCombate::ArmaCombate(std::string arma, int damage, int sharpness, int letalidad, std::string tipo)
-: letalidad(letalidad), damage(damage), sharpness(sharpness), arma(arma), tipo(tipo) {}
-
+ArmaCombate::ArmaCombate(std::string arma_, int damage_, int sharpness_, int letalidad_, std::string tipo_)
+: letalidad(letalidad_), damage(damage_), sharpness(sharpness_), 
+  arma(arma_), tipo(tipo_) {}
 ArmaCombate::~ArmaCombate() = default;
 
 int ArmaCombate::calcularDamTotal() const {
@@ -31,18 +31,18 @@ int ArmaCombate::getDamage() const {
 string ArmaCombate::getTipo() const {
     return tipo;
 }
+bool ArmaCombate::isMaldito() const {
+    return maldita;
+}
 void ArmaCombate::setDamage(int dam) {
     damage = dam;
 }
 void ArmaCombate::setMaldito(bool maldecir) {
     maldita = maldecir;
 }
-bool ArmaCombate::isMaldito() const {
-    return maldita;
-}
-// =====================================================
-// ==================== HachaSimple ====================
-// =====================================================
+
+// ==================== HachaSimple =================================================================
+
 HachaSimple::HachaSimple()
     : ArmaCombate("Hacha Simple", 10, 5, 2, "Arma Combate") {
         int randomMaterial = rand() % 4;
@@ -133,10 +133,10 @@ void HachaSimple::rehacer() {
     }
 }
 
-// ====================================================
-// ==================== HachaDoble ====================
-// ====================================================
-HachaDoble::HachaDoble() : ArmaCombate("Hacha Doble", 11, 2, 5, "Arma Combate") {
+// ==================== HachaDoble ==================================================================
+
+HachaDoble::HachaDoble() : 
+    ArmaCombate("Hacha Doble", 11, 2, 5, "Arma Combate") {
     int randomMaterial = rand() % 4;
     switch (randomMaterial) {
         case 0:
@@ -174,6 +174,7 @@ HachaDoble::HachaDoble() : ArmaCombate("Hacha Doble", 11, 2, 5, "Arma Combate") 
     maldita = rand() % 3 == 0;
 }
 HachaDoble::~HachaDoble() = default;
+
 int HachaDoble::calcularDamage() const {
     int damTotal = damage;
     if (quebrada) {
@@ -184,7 +185,6 @@ int HachaDoble::calcularDamage() const {
     }
     return damTotal;    
 }
-
 int HachaDoble::calcularAddedDamage() const {
     int addDamTotal = addSharpness;
     if (quebrada) {
@@ -220,9 +220,7 @@ void HachaDoble::lanzar(shared_ptr<Personaje> enemigo) {
     }
 }
 
-// ================================================
-// ==================== Espada ====================
-// ================================================
+// ==================== Espada ==================================================================
 
 enum MaterialEspada {
     HIERRO,
@@ -276,7 +274,6 @@ Espada::Espada() : ArmaCombate("Espada", 12, 5, 2, "Arma Combate") {
     legendaria = rand() % 3 == 0;
     maldita = rand() % 3 == 0;
 }
-
 Espada::~Espada() = default;
 
 int Espada::calcularDamage() const {
@@ -320,10 +317,10 @@ void Espada::canjearAura(shared_ptr<Personaje> enemigo) {
     }
 }
 
-// ===============================================
-// ==================== Lanza ====================
-// ===============================================
-Lanza::Lanza() : ArmaCombate("Lanza", 7, 3, 3, "Arma Combate") {
+// ==================== Lanza ===========================================================
+
+Lanza::Lanza() : 
+    ArmaCombate("Lanza", 7, 3, 3, "Arma Combate") {
     int random = rand() % 3;
     if (random == 0){
         envenenada = true;
@@ -375,9 +372,8 @@ void Lanza::deshacerEnvenenamiento() {
     }
 }
 
-// =================================================
-// ==================== Garrote ====================
-// =================================================
+// ==================== Garrote =================================================================
+
 Garrote::Garrote() : ArmaCombate("Garrote", 8, 4, 4, "Arma Combate") {
     int random = rand() % 3;
     if (random == 0){

@@ -16,7 +16,7 @@ class Arma{
         virtual std::string getTipo() const = 0;
         virtual bool isMaldito() const = 0;
         //Setters Virtuales
-        virtual void setDamage(int damage) = 0;
+        virtual void setDamage(int dam) = 0;
         virtual void setMaldito(bool maldecir) = 0;
         //Funciones Virtuales
         virtual int damAtaqueRapido() const = 0;

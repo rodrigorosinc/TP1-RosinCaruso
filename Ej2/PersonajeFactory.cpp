@@ -21,7 +21,7 @@ enum NombreGuerreros {
     BOROMIR, GUTS, THOR, HERCULES, KRATOS,
     BRIENNE_OF_TARTH, JAIME_LANNISTER,
     JON_SNOW, MAXIMUS, MULAN, 
-    NUM_GUERREROS // Para contar el número de guerreros
+    NUM_GUERREROS 
 };
 
 std::string chooseNombreMagos() {
@@ -49,6 +49,7 @@ std::string chooseNombreMagos() {
         default: return "Mago Desconocido"; // En caso de que no se haya elegido un nombre válido
     }
 }
+
 std::string chooseNombreGuerreros() {
     int randomIndex = rand() % NUM_GUERREROS;
     switch (randomIndex) {
@@ -75,13 +76,12 @@ std::string chooseNombreGuerreros() {
     }
 }
 
-
 void PersonajeFactory::inicializarSemilla(){
     static bool semillaInicializada = false;
     if (semillaInicializada) {
         return; // La semilla ya fue inicializada, no hacemos nada
     }
-    semillaInicializada = true; // Marcamos que la semilla ha sido inicializada
+    semillaInicializada = true;
     srand(time(nullptr));
 }
 int PersonajeFactory::generarNumerosRandom(int limInf, int limSup){
@@ -89,7 +89,7 @@ int PersonajeFactory::generarNumerosRandom(int limInf, int limSup){
                                                         //afuera sumando porq es el min valor que queremos que tome
 }
 shared_ptr<Magos> PersonajeFactory::crearMago(){
-    int tipoMago = generarNumerosRandom(0,3);
+    int tipoMago = generarNumerosRandom(0,3); // Tipo de mago, hechicero, conjurador, nigromante o brujo
     string nombre = chooseNombreMagos();
 
     int hp = rand() % 60 + 90; // HP entre 90 y 150
@@ -105,11 +105,10 @@ shared_ptr<Magos> PersonajeFactory::crearMago(){
     }
     shared_ptr<Arma> armaActual;
     if (!armas.empty()) {
-        armaActual = armas[0]; // Asignar la primera arma como arma actual
+        armaActual = armas[0]; // Asignar la primera como arma actual
     } else {
-        armaActual = nullptr; // No hay armas, así que no hay arma actual
+        armaActual = nullptr;
     }
-
     switch (tipoMago) {
         case 0: return make_shared<Hechicero>(nombre, hp, armas, armaActual);
         case 1: return make_shared<Conjurador>(nombre, hp, armas, armaActual);
@@ -117,24 +116,22 @@ shared_ptr<Magos> PersonajeFactory::crearMago(){
         case 3: return make_shared<Brujo>(nombre, hp, armas, armaActual);
     }
     return nullptr; // En caso de que no se haya creado un personaje
-
 }
-shared_ptr<Guerreros> PersonajeFactory::crearGuerrero(){
-    int tipoGuerrero = generarNumerosRandom(0,4);
-    string nombre = chooseNombreGuerreros();
 
+shared_ptr<Guerreros> PersonajeFactory::crearGuerrero(){
+    int tipoGuerrero = generarNumerosRandom(0,4); // Tipo de guerrero, caballero, barbaro, paladin, gladiador o mercenario
+    string nombre = chooseNombreGuerreros();
     int hp = rand() % 75 + 95; // HP entre 95 y 170
     vector<shared_ptr<Arma>> armas;
-    int numArmas = generarNumerosRandom(0, 2); // Número de armas entre 0 y 2
+    int numArmas = generarNumerosRandom(0, 2);
     for (int i = 0; i < numArmas; ++i) {
-        bool armaCombate = rand() % 2; // 50% de probabilidad de ser un arma de combate
+        bool armaCombate = rand() % 2; 
         if (armaCombate) {
             armas.push_back(crearArmaDeCombate());
         } else {
             armas.push_back(crearItemMagico());
         }
     }
-    
     shared_ptr<Arma> armaActual;
     if (!armas.empty()) {
         int randIndex = rand() % armas.size();
@@ -142,7 +139,6 @@ shared_ptr<Guerreros> PersonajeFactory::crearGuerrero(){
     } else {
         armaActual = nullptr; 
     }
-    
     switch (tipoGuerrero){
         case 0: return make_shared<Caballero>(nombre, hp, armas, armaActual);
         case 1: return make_shared<Barbaro>(nombre, hp, armas, armaActual);
@@ -152,9 +148,9 @@ shared_ptr<Guerreros> PersonajeFactory::crearGuerrero(){
     }
     return nullptr; // En caso de que no se haya creado un personaje
 }
+
 shared_ptr<ItemMagico> PersonajeFactory::crearItemMagico(){
     int tipoItem = generarNumerosRandom(0, 3);
-
     switch (tipoItem) {
         case 0: return make_shared<Pocion>();
         case 1: return make_shared<LibroDeHechizos>();
@@ -165,7 +161,6 @@ shared_ptr<ItemMagico> PersonajeFactory::crearItemMagico(){
 }
 shared_ptr<ArmaCombate> PersonajeFactory::crearArmaDeCombate(){
     int tipoArma = generarNumerosRandom(0, 4);
-
     switch (tipoArma) {
         case 0: return make_shared<HachaSimple>();
         case 1: return make_shared<HachaDoble>();
@@ -175,11 +170,11 @@ shared_ptr<ArmaCombate> PersonajeFactory::crearArmaDeCombate(){
     }
     return nullptr; // En caso de que no se haya creado un arma de combate
 }
+
 vector<shared_ptr<Personaje>> PersonajeFactory::crearPersonajes(){
     vector<shared_ptr<Personaje>> personajes;
     int numMagos = generarNumerosRandom(3, 7);
     int numGuerreros = generarNumerosRandom(3, 7);
-    
     cout << "Se crearon " << numMagos << " magos" << endl;
     for (int i = 0; i < numMagos; ++i) {
         personajes.push_back(crearMago());
@@ -188,6 +183,5 @@ vector<shared_ptr<Personaje>> PersonajeFactory::crearPersonajes(){
     for (int i = 0; i < numGuerreros; ++i) {
         personajes.push_back(crearGuerrero());
     }
-    
     return personajes;
 }
